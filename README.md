@@ -1,2 +1,1 @@
-# devoloper
-hanya untuk hiburan semata
+panelbyravaelstore.my.id
