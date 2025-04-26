@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemutar Musik</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "URL_WEBSITE_ANDA",
+      "logo": "URL_LOGO_ANDA"
+    }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #222;
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .music-player {
+            background-color: #333;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .music-list-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            z-index: 2;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+        }
+
+        .music-list-btn:hover {
+            background-color: #777;
+            transform: translateY(-2px);
+        }
+
+        .music-list {
+            position: absolute;
+            top: 55px;
+            right: 15px;
+            background: rgba(51, 51, 51, 0.85);
+            color: #ecf0f1;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            list-style: none;
+            width: 250px;
+            text-align: left;
+            display: none;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .music-list.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .music-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .music-list li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #666;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .music-list li:last-child {
+            border-bottom: none;
+        }
+
+        .music-list li:hover {
+            background: linear-gradient(to right, #4a148c, #c62828);
+            color: #fff;
+        }
+
+        .music-list button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .music-list button:hover {
+            background-color: #777;
+        }
+
+        .album-cover {
+            width: 80%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            margin-top: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+        }
+
+        .album-cover:hover {
+            transform: scale(1.05);
+        }
+
+        .album-cover video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .album-cover::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: conic-gradient(from 90deg, #ffeb3b, #29b6f6, #9c27b0, #f44336, #ffeb3b);
+            border-radius: 20px;
+            z-index: -1;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .album-cover::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 17px;
+            z-index: 0;
+        }
+
+        .song-info {
+            margin-bottom: 15px;
+        }
+
+        .song-info .title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .song-info .artist {
+            font-size: 0.95em;
+            color: #ccc;
+        }
+
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .waveform-container {
+            flex-grow: 1;
+            margin: 0 12px;
+            height: 28px;
+            overflow: hidden;
+            background-color: #444;
+            border-radius: 8px;
+        }
+
+        .waveform {
+            background-image: url('path/to/waveform-image.png');
+            background-repeat: repeat-x;
+            height: 100%;
+            width: 200%;
+            background-position-x: 0%;
+            animation: moveWave 12s linear infinite;
+            background-size: contain;
+        }
+
+        @keyframes moveWave {
+            0% {
+                background-position-x: 0%;
+            }
+            100% {
+                background-position-x: -100%;
+            }
+        }
+
+        .progress-bar input[type="range"] {
+            position: absolute;
+            top: 0;
+            left: 45px;
+            right: 45px;
+            width: calc(100% - 90px);
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #777;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .progress-bar input[type="range"]::-webkit-slider-thumb:hover {
+            background-color: #999;
+            transform: scale(1.1);
+        }
+
+        .progress-bar span {
+            font-size: 0.85em;
+            color: #aaa;
+            width: 45px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 90%;
+            margin-bottom: 15px;
+        }
+
+        .controls button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 12px;
+            opacity: 0.8;
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            width: 45px;
+            height: 45px;
+            font-size: 1.6em;
+        }
+
+        .controls button:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .settings-container {
+            width: 90%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            padding: 25px;
+            background: #2a2a2a;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .settings-container.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .settings-container label {
+            color: #eee;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .settings-container input[type="number"],
+        .settings-container select {
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+            color: #eee;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .settings-container button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .settings-container button:hover {
+            background-color: #777;
+            transform: scale(1.05);
+        }
+
+        .alarm-time-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alarm-time-input input[type="number"] {
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+            color: #eee;
+            width: 70px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .alarm-song-select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+            color: #eee;
+            font-size: 1em;
+        }
+
+        .calculator {
+            width: 95%;
+            max-width: 350px;
+            background-color: #3a3a3a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+
+        #calculator-display {
+            grid-column: 1 / -1;
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.5em;
+            text-align: right;
+            margin-bottom: 10px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator button {
+            background-color: #505050;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .calculator button:hover {
+            background-color: #707070;
+        }
+
+        .calculator .operator {
+            background-color: #ff9f0a;
+        }
+
+        .calculator .operator:hover {
+            background-color: #d98709;
+        }
+
+        .calculator .clear {
+            background-color: #a9a9a9;
+        }
+
+        .calculator .clear:hover {
+            background-color: #c0c0c0;
+        }
+
+        .calculator .equal {
+            grid-column: span 1;
+            background-color: #007bff;
+        }
+
+        .calculator .equal:hover {
+            background-color: #0056b3;
+        }
+
+        .calculator .zero {
+            grid-column: span 2;
+        }
+
+        .calculator .backspace {
+            background-color: #f44336;
+        }
+
+        .calculator .backspace:hover {
+            background-color: #d32f2f;
+        }
+
+        .settings-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px;
+            opacity: 0.8;
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .settings-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        #timer-message, #alarm-message, #calculator-display {
+            color: #aaa;
+            font-size: 0.9em;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .music-list-settings {
+            position: absolute;
+            top: 55px;
+            right: 15px;
+            background: rgba(51, 51, 51, 0.9);
+            color: #ecf0f1;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 250px;
+            text-align: left;
+            display: none;
+            z-index: 3;
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .music-list-settings.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .music-list-settings h3 {
+            color: #eee;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .music-list-settings button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .music-list-settings button:hover {
+            background-color: #777;
+        }
+
+        .animated-text {
+            animation: rainbow-motion 5s linear infinite alternate;
+            white-space: nowrap; /* Mencegah teks turun baris */
+            overflow: hidden; /* Menyembunyikan teks yang keluar dari batas */
+            display: inline-block; /* Agar width sesuai konten */
+        }
+
+        @keyframes rainbow-motion {
+            0% { transform: translateX(0); color: #ff0000; }
+            20% { transform: translateX(10px); color: #ffa500; }
+            40% { transform: translateX(-10px); color: #ffff00; }
+            60% { transform: translateX(5px); color: #00ff00; }
+            80% { transform: translateX(-5px); color: #0000ff; }
+            100% { transform: translateX(0); color: #800080; }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        <button class="music-list-btn">List Musik</button>
+        <div class="music-list">
+            <ul>
+                <li>Alone - Tsukiyuki Miyako</li>
+                <li>Judul Lagu 2 - Artis 2</li>
+                <li>Judul Lagu 3 - Artis 3</li>
+                <li>Judul Lagu 4 - Artis 4</li>
+                <li>Judul Lagu 5 - Artis 5</li>
+                <li>Judul Lagu 6 - Artis 6</li>
+                <li>Judul Lagu 7 - Artis 7</li>
+                <li>Judul Lagu 8 - Artis 8</li>
+                <li>Judul Lagu 9 - Artis 9</li>
+                <li>Judul Lagu 10 - Artis 10</li>
+            </ul>
+            <button id="open-music-list-settings">Pengaturan</button>
+        </div>
+        <div class="album-cover" id="album-cover">
+            <video id="album-art" src="https://files.catbox.moe/8cc48e.mp4" alt="Album Cover" loop autoplay muted></video>
+        </div>
+        <div class="song-info">
+            <h2 class="title" id="song-title">Alone</h2>
+            <p class="artist" id="song-artist">Tsukiyuki Miyako</p>
+        </div>
+        <div class="progress-bar">
+            <span class="current-time">0:00</span>
+            <div class="waveform-container">
+                <div class="waveform"></div>
+            </div>
+            <input type="range" value="0" min="0" max="100" class="progress" id="progress">
+            <span class="duration">-:--</span>
+        </div>
+        <div class="controls">
+            <button class="prev-btn">(_-/-_)</button>
+            <button class="play-btn" id="play-button"><=></button>
+            <button class="next-btn">>></button>
+            <button id="repeat-btn">{~off~}</button>
+        </div>
+        <button class="settings-btn">⚙️ Pengaturan</button>
+        <div class="settings-container">
+            <label for="timer-minutes">Matikan Musik Otomatis (menit):</label>
+            <input type="number" id="timer-minutes" min="1" value="5">
+            <button id="set-timer-btn">Atur Timer</button>
+            <label for="alarm-time">Atur Alarm:</label>
+            <div class="alarm-time-input">
+                <input type="number" id="alarm-hour" min="0" max="23" placeholder="HH">
+                <span>:</span>
+                <input type="number" id="alarm-minute" min="0" max="59" placeholder="MM">
+            </div>
+            <label for="alarm-song">Pilih Musik Alarm:</label>
+            <select id="alarm-song" class="alarm-song-select">
+                <option value="-1">Pilih Lagu</option>
+                <option value="0">Alone - Tsukiyuki Miyako</option>
+                <option value="1">Judul Lagu 2 - Artis 2</option>
+                <option value="2">Judul Lagu 3 - Artis 3</option>
+                <option value="3">Judul Lagu 4 - Artis 4</option>
+                <option value="4">Judul Lagu 5 - Artis 5</option>
+                <option value="5">Judul Lagu 6 - Artis 6</option>
+                <option value="6">Judul Lagu 7 - Artis 7</option>
+                <option value="7">Judul Lagu 8 - Artis 8</option>
+                <option value="8">Judul Lagu 9 - Artis 9</option>
+                <option value="9">Judul Lagu 10 - Artis 10</option>
+            </select>
+            <button id="set-alarm-btn">Setel Alarm dengan Musik</button>
+            <label>Kalkulator</label>
+            <div class="calculator">
+                <div id="calculator-display">0</div>
+                <button class="clear">AC</button>
+                <button class="backspace">&lt;</button>
+                <button class="operator">%</button>
+                <button class="operator">÷</button>
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button class="operator">×</button>
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button class="operator">-</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button class="operator">+</button>
+                <button class="operator">Sin</button>
+                <button class="operator">Cos</button>
+                <button class="operator">Tan</button>
+                <button class="operator">Log</button>
+                <button class="zero">0</button>
+                <button>.</button>
+                <button class="equal">=</button>
+                <button class="operator">Ln</button>
+                <button class="operator">√</button>
+                <button class="operator">^</button>
+            </div>
+            <label>Animasi Teks Warna-warni:</label>
+            <div>
+                <button id="animate-on-btn">On</button>
+                <button id="animate-off-btn">Off</button>
+            </div>
+            <p id="timer-message"></p>
+            <p id="alarm-message"></p>
+            <button id="close-settings-btn">Selesai</button>
+        </div>
+        <div class="volume-control">
+            <button class="volume-btn"><img src="path/to/volume-icon.png" alt="Volume"></button>
+            <input type="range" value="100" min="0" max="100" class="volume-slider" id="volume-slider">
+        </div>
+        <audio id="audio-source" src="https://files.catbox.moe/8jkq4b.mp3"></audio>
+
+        <div class="music-list-settings">
+            <h3>Pengaturan List Musik</h3>
+            <button>Urutkan Berdasarkan Judul</button>
+            <button>Urutkan Berdasarkan Artis</button>
+            <button>Tampilkan Judul Lengkap</button>
+            <button id="close-music-list-settings">Tutup Pengaturan</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio-source');
+        const playBtn = document.getElementById('play-button');
+        const musicPlayer = document.querySelector('.music-player');
+        const albumCover = document.getElementById('album-cover');
+        const albumArtDisplay = document.getElementById('album-art');
+        const progress = document.getElementById('progress');
+        const currentTimeDisplay = document.querySelector('.current-time');
+        const durationDisplay = document.querySelector('.duration');
+        const volumeSlider = document.getElementById('volume-slider');
+        const songTitleDisplay = document.getElementById('song-title');
+        const songArtistDisplay = document.getElementById('song-artist');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const controlsContainer = document.querySelector('.controls');
+        const musicListBtn = document.querySelector('.music-list-btn');
+        const musicListDiv = document.querySelector('.music-list');
+        const musicListItems = document.querySelectorAll('.music-list li');
+        const settingsBtn = document.querySelector('.settings-btn');
+        const settingsContainer = document.querySelector('.settings-container');
+        const setTimerBtn = document.getElementById('set-timer-btn');
+        const timerMinutesInput = document.getElementById('timer-minutes');
+        const timerMessage = document.getElementById('timer-message');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        const setAlarmBtn = document.getElementById('set-alarm-btn');
+        const alarmHourInput = document.getElementById('alarm-hour');
+        const alarmMinuteInput = document.getElementById('alarm-minute');
+        const alarmMessage = document.getElementById('alarm-message');
+        const alarmSongSelect = document.getElementById('alarm-song');
+        const openMusicListSettingsBtn = document.getElementById('open-music-list-settings');
+        const musicListSettingsDiv = document.querySelector('.music-list-settings');
+        const closeMusicListSettingsBtn = document.getElementById('close-music-list-settings');
+        const calculatorDisplay = document.getElementById('calculator-display');
+        const calculatorButtons = document.querySelectorAll('.calculator button');
+        const backspaceButton = document.querySelector('.calculator .backspace');
+        const repeatBtn = document.getElementById('repeat-btn');
+        const animateOnBtn = document.getElementById('animate-on-btn');
+        const animateOffBtn = document.getElementById('animate-off-btn');
+
+        let isPlaying = false;
+        let currentSongIndex = 0;
+        let currentTimer;
+        let currentAlarm;
+        let calculatorState = {
+            displayValue: '0',
+            firstOperand: null,
+            operator: null,
+            waitingForSecondOperand: false
+        };
+        let isRepeat = false;
+
+        const songs = [
+            {
+                title: 'Alone',
+                artist: 'Tsukiyuki Miyako',
+                audioSrc: 'https://files.catbox.moe/8jkq4b.mp3',
+                coverSrc: 'https://files.catbox.moe/8cc48e.mp4'
+            },
+            {
+                title: 'Judul Lagu 2',
+                artist: 'Artis 2',
+                audioSrc: 'URL_LAGU_2',
+                coverSrc: 'https://v16m-default.akamaized.net/58fd84732969bf6e3b323a6f1838bdff/67d8b148/video/tos/alisg/tos-alisg-pve-0037c001/oYqbIq0dbBAdMTBLEhi3AIzRjCVw8Ad5EhfZMi/?a=0&bti=OUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg&ch=0&cr=0&dr=0&er=0&lr=all&net=0&cd=0%7C0%7C0%7C0&cv=1&br=5564&bt=2782&cs=0&ds=6&ft=XE5bCqT0majPD12x8c6J3wUOx5EcMeF~O5&mime_type=video_mp4&qs=0&rc=OzlnNzk3aWQ8Zjs5OTo4aEBpM3Y4bnE5cmc1eTMzODczNEAwY15eYmI1NmAxMl5jYi9hYSNuX3BiMmRzbzNgLS1kMTFzcw%3D%3D&vvpl=1&l=20250318013017B5A05DA003A2E91E7AE0&btag=e00098000'
+            },
+            {
+                title: 'Judul Lagu 3',
+                artist: 'Artis 3',
+                audioSrc: 'https://sf16-ies-music-va.tiktokcdn.com/obj/musically-maliva-obj/7456658095084751621.mp3',
+                coverSrc: 'https://v16m-default.akamaized.net/c5fe6d9dae8453f03ef5628e17c6b18c/67d8b709/video/tos/alisg/tos-alisg-pve-0037c001/os0kfCEEIBgnVErfzMFUvUKNBG5TxEATDByRQ6/?a=0&bti=OUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg&ch=0&cr=0&dr=0&er=0&lr=all&net=0&cd=0%7C0%7C0%7C0&cv=1&br=1434&bt=717&cs=0&ds=6&ft=XE5bCqT0majPD12m4.6J3wUOx5EcMeF~O5&mime_type=video_mp4&qs=0&rc=aTppNDs0NjtnOzg5NTQ3NUBpank5eHc5cm9seDMzODczNEBhNmEvX2MyNV4xYjA0LjIyYSMtYWExMmRjcGtgLS1kMTFzcw%3D%3D&vvpl=1&l=2025031801480147A0DC218'
+            },
+            {
+                title: 'Judul Lagu 4',
+                artist: 'Artis 4',
+                audioSrc: 'URL_LAGU_4',
+                coverSrc: 'URL_COVER_4'
+            },
+            {
+                title: 'Judul Lagu 5',
+                artist: 'Artis 5',
+                audioSrc: 'URL_LAGU_5',
+                coverSrc: 'URL_COVER_5'
+            },
+            {
+                title: 'Judul Lagu 6',
+                artist: 'Artis 6',
+                audioSrc: 'URL_LAGU_6',
+                coverSrc: 'URL_COVER_6'
+            },
+            {
+                title: 'Judul Lagu 7',
+                artist: 'Artis 7',
+                audioSrc: 'URL_LAGU_7',
+                coverSrc: 'URL_COVER_7'
+            },
+            {
+                title: 'Judul Lagu 8',
+                artist: 'Artis 8',
+                audioSrc: 'URL_LAGU_8',
+                coverSrc: 'URL_COVER_8'
+            },
+            {
+                title: 'Judul Lagu 9',
+                artist: 'Artis 9',
+                audioSrc: 'URL_LAGU_9',
+                coverSrc: 'URL_COVER_9'
+            },
+            {
+                title: 'Judul Lagu 10',
+                artist: 'Artis 10',
+                audioSrc: 'URL_LAGU_10',
+                coverSrc: 'URL_COVER_10'
+            }
+        ];
+
+        function loadSong(index) {
+            const currentSong = songs[index];
+            songTitleDisplay.textContent = currentSong.title;
+            songArtistDisplay.textContent = currentSong.artist;
+            audio.src = currentSong.audioSrc;
+            albumArtDisplay.src = currentSong.coverSrc;
+        }
+
+        function playSong() {
+            audio.play();
+            isPlaying = true;
+            playBtn.textContent = '=';
+            musicPlayer.classList.add('playing');
+            const waveform = document.querySelector('.waveform');
+            if (waveform) {
+                waveform.style.animationPlayState = 'running';
+            }
+            albumArtDisplay.play();
+        }
+
+        function pauseSong() {
+            audio.pause();
+            isPlaying = false;
+            playBtn.textContent = '<=>';
+            musicPlayer.classList.remove('playing');
+            const waveform = document.querySelector('.waveform');
+            if (waveform) {
+                waveform.style.animationPlayState = 'paused';
+            }
+            albumArtDisplay.pause();
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            const duration = formatTime(audio.duration);
+            durationDisplay.textContent = duration;
+            progress.max = audio.duration;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = formatTime(audio.currentTime);
+            currentTimeDisplay.textContent = currentTime;
+            progress.value = audio.currentTime;
+        });
+
+        progress.addEventListener('input', () => {
+            audio.currentTime = progress.value;
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value / 100;
+        });
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${minutes}:${remainingSeconds}`;
+        }
+
+        loadSong(currentSongIndex);
+
+        prevBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) playSong();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) playSong();
+        });
+
+        audio.addEventListener('ended', () => {
+            if (isRepeat) {
+                playSong();
+            } else {
+                nextBtn.click();
+            }
+        });
+
+        musicListBtn.addEventListener('click', () => {
+            musicListDiv.classList.toggle('show');
+            musicListSettingsDiv.classList.remove('show');
+            settingsContainer.classList.remove('show');
+        });
+
+        musicListItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentSongIndex = index;
+                loadSong(currentSongIndex);
+                if (isPlaying) {
+                    playSong();
+                }
+                musicListDiv.classList.remove('show');
+                musicListSettingsDiv.classList.remove('show');
+                settingsContainer.classList.remove('show');
+            });
+        });
+
+        settingsBtn.addEventListener('click', () => {
+            settingsContainer.classList.toggle('show');
+            musicListDiv.classList.remove('show');
+            musicListSettingsDiv.classList.remove('show');
+        });
+
+        setTimerBtn.addEventListener('click', () => {
+            const minutes = parseInt(timerMinutesInput.value);
+            if (isNaN(minutes) || minutes <= 0) {
+                timerMessage.textContent = 'Masukkan angka menit yang valid.';
+                return;
+            }
+            if (currentTimer) {
+                clearTimeout(currentTimer);
+            }
+            const milliseconds = minutes * 60 * 1000;
+            timerMessage.textContent = `Musik akan mati otomatis setelah ${minutes} menit.`;
+            currentTimer = setTimeout(() => {
+                pauseSong();
+                timerMessage.textContent = 'Musik dimatikan otomatis.';
+                currentTimer = null;
+            }, milliseconds);
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsContainer.classList.remove('show');
+        });
+
+        setAlarmBtn.addEventListener('click', () => {
+            const hour = parseInt(alarmHourInput.value);
+            const minute = parseInt(alarmMinuteInput.value);
+            const selectedSongIndex = parseInt(alarmSongSelect.value);
+
+            if (isNaN(hour) || hour < 0 || hour > 23 || isNaN(minute) || minute < 0 || minute > 59) {
+                alarmMessage.textContent = 'Masukkan waktu alarm yang valid (HH:MM).';
+                return;
+            }
+
+            const now = new Date();
+            const alarmTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
+
+            if (alarmTime <= now) {
+                alarmTime.setDate(alarmTime.getDate() + 1);
+            }
+
+            const timeToAlarm = alarmTime.getTime() - now.getTime();
+            alarmMessage.textContent = `Alarm diatur untuk pukul ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}.`;
+
+            if (currentAlarm) {
+                clearTimeout(currentAlarm);
+            }
+
+            currentAlarm = setTimeout(() => {
+                if (selectedSongIndex >= 0 && selectedSongIndex < songs.length) {
+                    currentSongIndex = selectedSongIndex;
+                    loadSong(currentSongIndex);
+                    playSong();
+                    alarmMessage.textContent = `Alarm berbunyi! Memainkan lagu: ${songs[currentSongIndex].title}.`;
+                } else {
+                    alarmMessage.textContent = 'Alarm berbunyi!';
+                }
+                currentAlarm = null;
+            }, timeToAlarm);
+        });
+
+        // Calculator Functions
+        function updateDisplay() {
+            calculatorDisplay.textContent = calculatorState.displayValue;
+        }
+        function handleDigit(digit) {
+            if (calculatorState.waitingForSecondOperand === true) {
+                calculatorState.displayValue = digit;
+                calculatorState.waitingForSecondOperand = false;
+            } else {
+                calculatorState.displayValue = calculatorState.displayValue === '0' ? digit : calculatorState.displayValue + digit;
+            }
+        }
+        function handleOperator(nextOperator) {
+            const inputValue = parseFloat(calculatorState.displayValue);
+            if (calculatorState.operator && calculatorState.waitingForSecondOperand) {
+                calculatorState.operator = nextOperator;
+                return;
+            }
+            if (calculatorState.firstOperand === null) {
+                calculatorState.firstOperand = inputValue;
+            } else if (calculatorState.operator) {
+                const result = performCalculation[calculatorState.operator](calculatorState.firstOperand, inputValue);
+                calculatorState.displayValue = String(result);
+                calculatorState.firstOperand = result;
+            }
+            calculatorState.waitingForSecondOperand = true;
+            calculatorState.operator = nextOperator;
+        }
+        const performCalculation = {
+            '/': (firstOperand, secondOperand) => firstOperand / secondOperand,
+            '×': (firstOperand, secondOperand) => firstOperand * secondOperand,
+            '+': (firstOperand, secondOperand) => firstOperand + secondOperand,
+            '-': (firstOperand, secondOperand) => firstOperand - secondOperand,
+            '%': (firstOperand, secondOperand) => firstOperand % secondOperand,
+        };
+        function handleEquals() {
+            const inputValue = parseFloat(calculatorState.displayValue);
+            if (calculatorState.operator) {
+                const result = performCalculation[calculatorState.operator](calculatorState.firstOperand, inputValue);
+                calculatorState.displayValue = String(result);
+                calculatorState.firstOperand = result;
+                calculatorState.operator = null;
+                calculatorState.waitingForSecondOperand = false;
+            } else {
+                calculatorState.displayValue = calculatorState.firstOperand !== null ? String(calculatorState.firstOperand) : calculatorState.displayValue;
+            }
+        }
+        function handleDecimal() {
+            if (!calculatorState.displayValue.includes('.')) {
+                calculatorState.displayValue += '.';
+            }
+        }
+        function handleClear() {
+            calculatorState.displayValue = '0';
+            calculatorState.firstOperand = null;
+            calculatorState.operator = null;
+            calculatorState.waitingForSecondOperand = false;
+        }
+        function handleSign() {
+            calculatorState.displayValue = String(parseFloat(calculatorState.displayValue) * -1);
+        }
+        function handleBackspace() {
+            calculatorState.displayValue = calculatorState.displayValue.slice(0, -1);
+            if (calculatorState.displayValue === '') {
+                calculatorState.displayValue = '0';
+            }
+        }
+        calculatorButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+                if (!isNaN(parseFloat(value)) || value === '.') {
+                    handleDigit(value);
+                } else if (button.classList.contains('operator')) {
+                    handleOperator(value);
+                } else if (button.classList.contains('equal')) {
+                    handleEquals();
+                } else if (button.classList.contains('clear')) {
+                    handleClear();
+                } else if (value === '+/-') {
+                    handleSign();
+                }
+                updateDisplay();
+            });
+        });
+        backspaceButton.addEventListener('click', handleBackspace);
+        updateDisplay(); // Initial display
+
+        openMusicListSettingsBtn.addEventListener('click', () => {
+            musicListSettingsDiv.classList.toggle('show');
+            musicListDiv.classList.remove('show');
+            settingsContainer.classList.remove('show');
+        });
+
+        closeMusicListSettingsBtn.addEventListener('click', () => {
+            musicListSettingsDiv.classList.remove('show');
+        });
+
+        repeatBtn.addEventListener('click', () => {
+            isRepeat = !isRepeat;
+            repeatBtn.textContent = isRepeat ? '{~on~}' : '{~off~}';
+        });
+
+        animateOnBtn.addEventListener('click', () => {
+            songTitleDisplay.classList.add('animated-text');
+            songArtistDisplay.classList.add('animated-text');
+        });
+
+        animateOffBtn.addEventListener('click', () => {
+            songTitleDisplay.classList.remove('animated-text');
+            songArtistDisplay.classList.remove('animated-text');
+        });
+    </script>
+</body>
+</html>
