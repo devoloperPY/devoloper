@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravaelstore</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #00acc1;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid #b2dfdb;
+            box-sizing: border-box;
+        }
+
+        header .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        header .user-details h1 {
+            font-size: 1.5em;
+            margin: 0 0 5px 0;
+            font-weight: 600;
+        }
+
+        header .user-details p {
+            font-size: 0.9em;
+            color: #e0f7fa;
+            margin: 0;
+        }
+
+        header .header-actions a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            font-size: 0.8em;
+            transition: background-color 0.3s ease;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        header .header-actions a:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        header .header-actions a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        header .saldo-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        header .saldo-info div {
+            font-size: 0.9em;
+            color: #e0f7fa;
+        }
+
+        header .saldo-info strong {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        header .quick-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        header .quick-actions a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background-color: #00897b;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        header .quick-actions a:hover {
+            background-color: #00695c;
+        }
+
+        header .quick-actions a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        .announcement {
+            background-color: #e0f2f7;
+            color: #00acc1;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            border-bottom: 1px solid #b2dfdb;
+            box-sizing: border-box;
+        }
+
+        section {
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        section h2 {
+            font-size: 1.3em;
+            color: #00acc1;
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #b2dfdb;
+            padding-bottom: 5px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .category-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-sizing: border-box;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        .category-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-item:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        .category-item img {
+            max-width: 60px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+
+        .category-item span {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* Gaya untuk Halaman Nokos */
+        #nokosPage, #premiumAppsPage, #youtubePremiumPage, #suntikManualPage, #viewTTOnlyPage, #buyViewTTPage, #panelBotPage, #bantuanPage, #smmPanel1Page {
+            display: none;
+        }
+
+        #nokosPage header, #premiumAppsPage header, #youtubePremiumPage header, #suntikManualPage header, #viewTTOnlyPage header, #buyViewTTPage header, #panelBotPage header, #bantuanPage header, #smmPanel1Page header {
+            background-color: #00acc1;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border-bottom: 1px solid #b2dfdb;
+            box-sizing: border-box;
+        }
+
+        #nokosPage header a, #premiumAppsPage header a, #youtubePremiumPage header a, #suntikManualPage header a, #viewTTOnlyPage header a, #buyViewTTPage header a, #panelBotPage header a, #bantuanPage header a, #smmPanel1Page header a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #nokosPage header a:hover, #premiumAppsPage header a:hover, #youtubePremiumPage header a:hover, #suntikManualPage header a:hover, #viewTTOnlyPage header a:hover, #buyViewTTPage header a:hover, #panelBotPage header a:hover, #bantuanPage header a:hover, #smmPanel1Page header a:hover {
+            opacity: 1;
+        }
+
+        #nokosPage header a:active, #premiumAppsPage header a:active, #youtubePremiumPage header a:active, #suntikManualPage header a:active, #viewTTOnlyPage header a:active, #buyViewTTPage header a:active, #panelBotPage header a:active, #bantuanPage header a:active, #smmPanel1Page header a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #nokosPage header h1, #premiumAppsPage header h1, #youtubePremiumPage header h1, #suntikManualPage header h1, #viewTTOnlyPage header h1, #buyViewTTPage header h1, #panelBotPage header h1, #bantuanPage header h1, #smmPanel1Page header h1 {
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        #nokosPage .content, #premiumAppsPage .premium-grid, #youtubePremiumPage .content, #suntikManualPage .content, #viewTTOnlyPage .content, #buyViewTTPage .content, #panelBotPage .content, #bantuanPage .content, #smmPanel1Page .content {
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #nokosPage .navigation {
+            display: flex;
+            background-color: #e0f2f7;
+            padding: 8px; /* Perkecil padding navigasi */
+            border-bottom: 1px solid #b2dfdb;
+            margin-bottom: 12px; /* Perkecil margin bawah navigasi */
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosPage .navigation a {
+            color: #00acc1;
+            text-decoration: none;
+            padding: 6px 12px; /* Perkecil padding link navigasi */
+            border-radius: 6px;
+            margin-right: 8px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Tambah transisi hover */
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #nokosPage .navigation a.active {
+            background-color: #b2dfdb;
+            color: #00897b;
+            font-weight: 500;
+        }
+
+        #nokosPage .navigation a:hover {
+            background-color: #b2dfdb;
+            color: #00897b;
+        }
+
+        #nokosPage .navigation a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #nokosPage .balance {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 12px; /* Perkecil padding balance */
+            border-radius: 8px;
+            margin-bottom: 12px; /* Perkecil margin bawah balance */
+            font-size: 0.9em;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosPage .balance strong {
+            font-size: 1.3em; /* Perkecil sedikit ukuran font saldo */
+            color: #00acc1;
+        }
+
+        #nokosPage .country-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px; /* Perkecil jarak antar item */
+            margin-bottom: 15px;
+            padding: 8px; /* Tambahkan sedikit padding di sekitar daftar */
+            background-color: #f0f8f9; /* Warna latar belakang lembut */
+            border-radius: 10px; /* Sudut lebih bulat */
+        }
+
+        #nokosPage .country-item {
+            background-color: #fff;
+            border: 1px solid #e0f7fa; /* Warna border lebih terang */
+            padding: 8px 10px; /* Perkecil padding dalam item */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Perkecil jarak antar elemen dalam item */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out; /* Tambah transisi hover */
+            font-size: 0.85em;
+            justify-content: space-between;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #nokosPage .country-item:hover {
+            background-color: #e0f7fa; /* Efek hover lebih jelas */
+            transform: scale(1.02); /* Efek sedikit membesar saat hover */
+        }
+
+        #nokosPage .country-item:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #nokosPage .country-item > span:first-child {
+            flex-grow: 1;
+            font-weight: 500; /* Sedikit tebal untuk nama negara */
+        }
+
+        #nokosPage .country-item .status-stock {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Perkecil jarak antara status dan stok */
+        }
+
+        #nokosPage .country-item .status {
+            font-size: 0.7em;
+            padding: 4px 7px; /* Perkecil padding status */
+            border-radius: 6px; /* Sudut status lebih bulat */
+            font-weight: bold;
+            order: 1;
+        }
+
+        #nokosPage .country-item .status.active {
+            background-color: #4caf50;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosPage .country-item .status.action {
+            background-color: #ff9800;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosPage .country-item .stock {
+            font-size: 0.8em;
+            color: #777;
+            order: 2;
+        }
+
+        #nokosPurchaseForm {
+            margin-top: 15px; /* Perkecil margin atas formulir */
+            padding: 12px; /* Perkecil padding formulir */
+            background-color: #f0f8f9; /* Warna latar belakang formulir */
+            border: 1px solid #e0f7fa;
+            border-radius: 10px; /* Sudut formulir lebih bulat */
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Tambah shadow formulir */
+        }
+
+        #nokosPurchaseForm h3 {
+            font-size: 1em; /* Perkecil ukuran font judul formulir */
+            color: #00897b;
+            margin-top: 0;
+            margin-bottom: 8px; /* Perkecil margin bawah judul formulir */
+            border-bottom: 1px solid #b2dfdb; /* Tambah garis bawah judul formulir */
+            padding-bottom: 5px;
+        }
+
+        #nokosPurchaseForm .form-group {
+            margin-bottom: 8px; /* Perkecil margin bawah grup form */
+        }
+
+        #nokosPurchaseForm .form-group label {
+            display: block;
+            margin-bottom: 3px; /* Perkecil margin bawah label */
+            font-size: 0.8em;
+            color: #333;
+            font-weight: 500; /* Sedikit tebal untuk label */
+        }
+
+        #nokosPurchaseForm .form-group input[type="number"] {
+            width: 100%;
+            padding: 8px; /* Perkecil padding input */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.8em;
+        }
+
+        #nokosPurchaseForm .total-payment {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #00acc1;
+            margin-top: 8px; /* Perkecil margin atas total pembayaran */
+            margin-bottom: 12px; /* Perkecil margin bawah total pembayaran */
+        }
+
+        #nokosPurchaseForm button {
+            background-color: #00acc1;
+            color: white;
+            padding: 8px 12px; /* Perkecil padding tombol */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow tombol */
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #nokosPurchaseForm button:hover {
+            background-color: #00897b;
+        }
+
+        #nokosPurchaseForm button:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #nokosDetails {
+            margin-top: 12px; /* Perkecil margin atas detail */
+            padding: 12px; /* Perkecil padding detail */
+            background-color: #f0f8f9;
+            border: 1px solid #e0f7fa;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosDetails strong {
+            color: #00897b;
+        }
+
+        #nokosPage .operator-select, #nokosPage .service-info {
+            margin-bottom: 12px; /* Perkecil margin bawah select dan info */
+        }
+
+        #nokosPage .operator-select label, #nokosPage .service-info label {
+            display: block;
+            margin-bottom: 3px; /* Perkecil margin bawah label */
+            color: #333;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
+        #nokosPage .operator-select select, #nokosPage .service-info input[type="text"] {
+            width: 100%;
+            padding: 8px; /* Perkecil padding select dan input */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.8em;
+        }
+
+        #nokosPage .info-text {
+            color: #777;
+            font-size: 0.7em;
+            margin-top: 3px; /* Perkecil margin atas info text */
+        }
+
+        #nokosPage .product-details {
+            background-color: #e0f7fa; /* Warna latar belakang detail produk */
+            border: 1px solid #b2dfdb;
+            padding: 12px; /* Perkecil padding detail produk */
+            border-radius: 8px;
+            margin-bottom: 12px; /* Perkecil margin bawah detail produk */
+            font-size: 0.8em;
+        }
+
+        #nokosPage .product-details strong {
+            color: #00acc1;
+            font-size: 1em; /* Perkecil sedikit ukuran font strong */
+        }
+
+        #nokosPage .product-details p {
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+
+        #nokosPage .help-link {
+            display: inline-block;
+            background-color: #00acc1;
+            color: white;
+            padding: 8px 12px; /* Perkecil padding link bantuan */
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.8em;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); /* Tambah shadow lembut */
+        }
+
+        #nokosPage .help-link:hover {
+            background-color: #00897b;
+        }
+
+        #premiumAppsPage .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        #premiumAppsPage .app-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-sizing: border-box;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #premiumAppsPage .app-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #premiumAppsPage .app-item:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #premiumAppsPage .app-item img {
+            max-width: 60px;
+            height: auto;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        #premiumAppsPage .app-item span {
+            font-size: 0.8em;
+            color: #555;
+        }
+
+        #youtubePremiumPage .email-input {
+            margin-bottom: 20px;
+        }
+
+        #youtubePremiumPage .email-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #333;
+            font-weight: 500;
+        }
+
+        #youtubePremiumPage .email-input input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+        }
+
+        #youtubePremiumPage .nominal-options h2 {
+            font-size: 1.1em;
+            color: #00acc1;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #b2dfdb;
+            padding-bottom: 5px;
+        }
+
+        #youtubePremiumPage .nominal-options .option {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        #youtubePremiumPage .nominal-options .option strong {
+            color: #00897b;
+            font-size: 1em;
+        }
+
+        #suntikManualPage .product-category {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        #suntikManualPage .product-category h2 {
+            color: #00acc1;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        #suntikManualPage .product-category p {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+        }
+
+        #suntikManualPage .button-suntik {
+            display: inline-block;
+            background-color: #00acc1;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #suntikManualPage .button-suntik:hover {
+            background-color: #00897b;
+        }
+
+        #suntikManualPage .button-suntik:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #viewTTOnlyPage .category-title {
+            font-size: 1.1em;
+            color: #00acc1;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #b2dfdb;
+            padding-bottom: 5px;
+        }
+
+        #viewTTOnlyPage .product-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        #viewTTOnlyPage .product-item {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #viewTTOnlyPage .product-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        #viewTTOnlyPage .product-item strong {
+            color: #00897b;
+            font-size: 1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #viewTTOnlyPage .product-item p {
+            margin-top: 3px;
+            margin-bottom: 3px;
+            color: #555;
+        }
+
+        #buyViewTTPage .form-group {
+            margin-bottom: 15px;
+        }
+
+        #buyViewTTPage .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
+        #buyViewTTPage .form-group input[type="text"],
+        #buyViewTTPage .form-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+        }
+
+        #buyViewTTPage .total-bayar {
+            font-size: 1em;
+            color: #00897b;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        #buyViewTTPage .button-beli {
+            display: inline-block;
+            background-color: #00acc1;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #buyViewTTPage .button-beli:hover {
+            background-color: #00897b;
+        }
+
+        #buyViewTTPage .button-beli:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        /* Gaya untuk Halaman Panel Bot */
+        #panelBotPage {
+            display: none;
+        }
+
+        #panelBotPage header {
+            background-color: #00acc1;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border-bottom: 1px solid #b2dfdb;
+            box-sizing: border-box;
+        }
+
+        #panelBotPage header a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #panelBotPage header a:hover {
+            opacity: 1;
+        }
+
+        #panelBotPage header a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #panelBotPage header h1 {
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        #panelBotPage .content {
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #panelBotPage .form-group {
+            margin-bottom: 12px;
+        }
+
+        #panelBotPage .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.8em;
+        }
+
+        #panelBotPage .form-group input[type="text"],
+        #panelBotPage .form-group input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.8em;
+        }
+
+        #panelBotPage .button-beli {
+            display: inline-block;
+            background-color: #00acc1;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #panelBotPage .button-beli:hover {
+            background-color: #00897b;
+        }
+
+        #panelBotPage .button-beli:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        /* Gaya untuk Halaman Bantuan */
+        #bantuanPage {
+            display: none;
+        }
+
+        #bantuanPage header {
+            background-color: #00acc1;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border-bottom: 1px solid #b2dfdb;
+            box-sizing: border-box;
+        }
+
+        #bantuanPage header a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #bantuanPage header a:hover {
+            opacity: 1;
+        }
+
+        #bantuanPage header a:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+
+        #bantuanPage header h1 {
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        #bantuanPage .content {
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        #bantuanPage .bantuan-item {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        #bantuanPage .bantuan-item h3 {
+            color: #00acc1;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        #bantuanPage .bantuan-item p {
+            color: #555;
+            margin-bottom: 0;
+            font-size: 0.8em;
+        }
+
+        #bantuanPage .bantuan-item a {
+            display: block;
+            color: #00acc1;
+            text-decoration: none;
+            margin-top: 5px;
+            font-size: 0.8em;
+        }
+
+        #bantuanPage .bantuan-item .note {
+            color: #777;
+            font-size: 0.7em;
+            margin-top: 3px;
+        }
+
+        /* Gaya untuk Halaman SMM Panel 1 */
+        #smmPanel1Page .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        #smmPanel1Page .content img {
+            max-width: 80%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #smmPanel1Page .content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        #smmPanel1Page .content p strong {
+            color: #333;
+            font-weight: bold;
+        }
+
+        #smmPanel1Page .content .button-beli {
+            background-color: #00acc1;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.15s ease-out, filter 0.15s ease-out; /* Tambahkan transisi untuk efek halus */
+        }
+
+        #smmPanel1Page .content .button-beli:hover {
+            background-color: #00897b;
+        }
+
+        #smmPanel1Page .content .button-beli:active {
+            transform: translateX(3px); /* Efek geser ke samping */
+            filter: blur(1px); /* Efek blur sedikit */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="mainPage" class="main-page">
+            <header>
+                <div class="user-info">
+                    <div class="user-details">
+                        <h1>Halo Sobat Ravaelstore</h1>
+                        <p></p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="#">Group Informasi</a>
+                    </div>
+                </div>
+                <div class="saldo-info">
+                    <div>
+                        Saldo Anda<br>
+                        <strong>271 Triliun</strong>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <a href="#" class="quick-action">Isi Saldo</a>
+                    <a href="#" id="bantuanButton" class="quick-action">Bantuan</a>
+                    <a href="#" class="quick-action">Rootem</a>
+                </div>
+            </header>
+
+            <div class="announcement">
+                Transaksi Ewallet Saat Ini: 00:00
+            </div>
+
+            <section>
+                <h2>Best Seller</h2>
+                <div class="category-grid">
+                    <div class="category-item">
+                        <img src="https://files.catbox.moe/g8ldmy.jpg" alt="Youtube">
+                        <span>Youtube</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_suntikmanual.png" alt="Suntik Manual">
+                        <span>Suntik Manual</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="1000773564.jpg" alt="SMM Panel 1">
+                        <span>SMM Panel 1</span>
+                    </div>
+                    <div class="category-item" id="viewTTOnlyButton">
+                        <img src="https://files.catbox.moe/4w7rlb.jpg" alt="View TT Only">
+                        <span>View TT Only</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_dest.png" alt="Dest">
+                        <span>Dest</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_wallet.png" alt="Wallet">
+                        <span>Wallet</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Best</h2>
+                <div class="category-grid">
+                    <div class="category-item">
+                        <img src="placeholder_smmpanel2.png" alt="SMM Panel 2">
+                        <span>SMM Panel 2</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_iosapple.png" alt="Ios Apple">
+                        <span>Ios Apple</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_vps.png" alt="Vps">
+                        <span>Vps</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>eWallet</h2>
+                <div class="category-grid">
+                    <div class="category-item" id="nokosButton">
+                        <img src="https://files.catbox.moe/qdubv6.jpg" alt="Nokos">
+                        <span>Nokos</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_unblockimei.png" alt="Unblock Imei">
+                        <span>Unblock Imei</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_jpm.png" alt="Jpm">
+                        <span>Jpm</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Premium</h2>
+                <div class="category-grid">
+                    <div class="category-item" id="premAppsButton">
+                        <img src="https://files.catbox.moe/g1t2ww.jpg" alt="Prem App">
+                        <span>Prem App</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="https://files.catbox.moe/jojygz.jpg" alt="Bug WhatsApp">
+                        <span>Bug WhatsApp</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="https://files.catbox.moe/jojygz.jpg" alt="Ban & UnBan Wa">
+                        <span>Ban & UnBan Wa</span>
+                    </div>
+                    <div class="category-item" id="panelBotButton">
+                        <img src="https://files.catbox.moe/jnoxcu.png" alt="Panel Bot">
+                        <span>Panel Bot</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_jasacentangbiru.png" alt="Jasa Centang Biru">
+                        <span>Jasa Centang Biru</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_suntikmanual2.png" alt="Suntik Manual">
+                        <span>Suntik Manual</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Lainnya</h2>
+                <div class="category-grid">
+                    <div class="category-item">
+                        <img src="placeholder_tutorial.png" alt="Tutorial">
+                        <span>Tutorial</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_membership.png" alt="Membership">
+                        <span>Membership</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_rewardb5.png" alt="Reward B5">
+                        <span>Reward B5</span>
+                    </div>
+                    <div class="category-item">
+                        <img src="placeholder_layananfast.png" alt="Layanan Fast">
+                        <span>Layanan Fast</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="smmPanel1Page">
+            <header>
+                <a href="#" id="backToMainFromSMM1">← Kembali</a>
+                <h1>SMM Panel 1</h1>
+            </header>
+            <div class="content">
+                <img src="1000773562.jpg" alt="Gambar Produk SMM Panel 1">
+                <p><strong>Deskripsi Produk:</strong></p>
+                <p>Layanan SMM Panel #1 kami menawarkan berbagai macam layanan untuk meningkatkan kehadiran media sosial Anda. Dapatkan followers, likes, views, dan banyak lagi untuk platform seperti Instagram, TikTok, Facebook, dan lainnya. Kualitas terjamin dan harga terjangkau!</p>
+                <p style="margin-top: 10px;"><strong>Total Harga:</strong></p>
+                <p style="font-size: 1.2em; color: #00897b;">Mulai dari Rp 10.000</p>
+                <a href="#" class="button-beli">Beli Sekarang</a>
+            </div>
+        </div>
+
+        <div id="bantuanPage">
+            <header>
+                <a href="#" id="backToMainFromBantuan">← Kembali</a>
+                <h1>Bantuan</h1>
+            </header>
+            <div class="content">
+                <div class="bantuan-item">
+                    <h3>Official Channel WhatsApp</h3>
+                    <p>Dapatkan Informasi Update Seputar Aplikasi</p>
+                    <a href="#">[Tautan Channel WhatsApp]</a>
+                </div>
+                <div class="bantuan-item">
+                    <h3>Channel WhatsApp</h3>
+                    <p>Jika Grup WhatsApp Penuh Bisa Masuk Disini</p>
+                    <a href="#">[Tautan Grup WhatsApp]</a>
+                    <p class="note">Jika grup penuh, coba channel Telegram.</p>
+                </div>
+                <div class="bantuan-item">
+                    <h3>Channel Telegram</h3>
+                    <p>Jika Kamu Pengguna Telegram Bisa Masuk Juga Channel Resmi Kami</p>
+                    <a href="#">[Tautan Channel Telegram]</a>
+                </div>
+                <div class="bantuan-item">
+                    <h3>Customer Service</h3>
+                    <p>Terjadi Kendala? Bisa Hubungi CS Kami</p>
+                    <a href="#">[Tautan atau Informasi Kontak CS]</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="nokosPage" class="nokos-page">
+            <header>
+                <a href="#" id="backToMain">← Kembali</a>
+                <h1>Pembelian</h1>
+            </header>
+
+            <nav class="navigation">
+                <a href="#" class="nav-item active">Pembelian</a>
+                <a href="#" class="nav-item">Riwayat</a>
+            </nav>
+
+            <div class="content">
+                <div class="balance">
+                    Saldo Anda <br>
+                    <strong>271 Triliun</strong>
+                </div>
+
+                <div class="country-list">
+                    <div class="country-item" data-country="indonesia" data-price="8000">
+                        <img src="flag_indonesia.png" alt="Indonesia">
+                        <span>Indonesia</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">2540</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="malaysia" data-price="15000">
+                        <img src="flag_malaysia.png" alt="Malaysia">
+                        <span>Malaysia</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">7864</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="rusia" data-price="20000">
+                        <img src="flag_rusia.png" alt="Rusia">
+                        <span>Rusia</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">9600</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="china" data-price="25000">
+                        <img src="flag_china.png" alt="China">
+                        <span>China</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">5366</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="france" data-price="22000">
+                        <img src="flag_france.png" alt="France">
+                        <span>France</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">36200</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="usa" data-price="30000">
+                        <img src="flag_usa.png" alt="USA">
+                        <span>USA</span>
+                        <div class="status-stock">
+                            <span class="status action">Action</span>
+                            <span class="stock">13619</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="australia" data-price="35000">
+                        <img src="flag_australia.png" alt="Australia">
+                        <span>Australia</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">51500</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="india" data-price="18000">
+                        <img src="flag_india.png" alt="India">
+                        <span>India</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">13250</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="netherlands" data-price="23000">
+                        <img src="flag_netherlands.png" alt="Netherlands">
+                        <span>Netherlands</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">13250</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="turkey" data-price="19000">
+                        <img src="flag_turkey.png" alt="Turkey">
+                        <span>Turkey</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">76998</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="thailand" data-price="16000">
+                        <img src="flag_thailand.png" alt="Thailand">
+                        <span>Thailand</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">7130</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="england" data-price="21000">
+                        <img src="flag_england.png" alt="England">
+                        <span>England</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">6600</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="colombia" data-price="17000">
+                        <img src="flag_colombia.png" alt="Colombia">
+                        <span>Colombia</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">5600</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="germany" data-price="24000">
+                        <img src="flag_germany.png" alt="Germany">
+                        <span>Germany</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">60000</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="philippines" data-price="10000">
+                        <img src="flag_philippines.png" alt="Philippines">
+                        <span>Philippines</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">3630</span>
+                        </div>
+                    </div>
+                    <div class="country-item" data-country="brazil" data-price="32000">
+                        <img src="flag_brazil.png" alt="Brazil">
+                        <span>Brazil</span>
+                        <div class="status-stock">
+                            <span class="status active">Active</span>
+                            <span class="stock">25434</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="nokosPurchaseForm">
+                    <h3>Formulir Pembelian</h3>
+                    <div class="form-group">
+                        <label for="quantity">Jumlah Nokos yang Dibeli:</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
+                    <div class="total-payment">
+                        Total Pembayaran: <span id="totalPayment">Rp 0</span>
+                    </div>
+                    <button id="buyNokosButton">Beli Sekarang</button>
+                </div>
+
+                <div id="nokosDetails" class="hidden-elements">
+                    <div class="operator-select">
+                        <label for="operator">Operator</label>
+                        <select id="operator">
+                            <option value="any">any</option>
+                        </select>
+                        <p class="info-text">Jika operator habis, maka akan otomatis membeli secara random</p>
+                    </div>
+
+                    <div class="service-info">
+                        <label for="service">Layanan</label>
+                        <input type="text" id="service" value="wha" readonly>
+                    </div>
+
+                    <div class="product-details">
+                        <strong>Whatsapp</strong>
+                        <p>Tersedia <span id="nokosStock"></span> Nomor</p>
+                        <p id="nokosPrice">Harga: </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="premiumAppsPage">
+            <header>
+                <a href="#" id="backToMainFromPremApps">← Kembali</a>
+                <h1>Streaming Prem</h1>
+            </header>
+            <div class="premium-grid">
+                <div class="app-item" id="youtubeAppItem">
+                    <img src="https://files.catbox.moe/g8ldmy.jpg" alt="Youtube">
+                    <span>Youtube</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_netflix.png" alt="Netflix">
+                    <span>Netflix</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_remini.png" alt="Remini">
+                    <span>Remini</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_primevideo.png" alt="Prime Vidio">
+                    <span>Prime Vidio</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_viu.png" alt="Viu">
+                    <span>Viu</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_telegram.png" alt="Telegram Premium">
+                    <span>Telegram Premium</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_getkontak.png" alt="Get Kontak">
+                    <span>Get Kontak</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_spotify.png" alt="Spotify">
+                    <span>Spotify</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_tiktokmusic.png" alt="Tiktok Music">
+                    <span>Tiktok Music</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_vidio.png" alt="Vidio">
+                    <span>Vidio</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_alightmotion.png" alt="Alight Motion">
+                    <span>Alight Motion</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_disneyplus.png" alt="Disney+">
+                    <span>Disney+</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_canva.png" alt="Canva">
+                    <span>Canva</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_bstation.png" alt="Bstation">
+                    <span>Bstation</span>
+                </div>
+                <div class="app-item">
+                    <img src="placeholder_capcut.png" alt="Capcut">
+                    <span>Capcut</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="youtubePremiumPage">
+            <header>
+                <a href="#" id="backToPremApps">← Kembali</a>
+                <h1>Kembali</h1>
+            </header>
+            <div class="content">
+                <div class="email-input">
+                    <label for="email">Masukkan Email Terdaftar</label>
+                    <input type="email" id="email" placeholder="example@email.com">
+                </div>
+                <div class="nominal-options">
+                    <h2>Pilihan Nominal</h2>
+                    <div class="option">
+                        <p>Youtube Premium 1 Bulan</p>
+                        <p>Layanan Fast</p>
+                        <strong>Rp3.500</strong>
+                    </div>
+                    <div class="option">
+                        <p>Youtube Premium 2 Bulan</p>
+                        <p>Layanan Fast</p>
+                        <strong>Rp8.000</strong>
+                    </div>
+                    <div class="option">
+                        <p>Youtube Premium 6 Bulan</p>
+                        <p>Layanan Fast</p>
+                        <strong>Rp23.000</strong>
+                    </div>
+                    <div class="option">
+                        <p>Youtube Premium 1 Tahun</p>
+                        <p>Layanan Fast</p>
+                        <strong>Rp28.000</strong>
+                    </div>
+                    <div class="option">
+                        <p>Youtube Premium 2 Tahun</p>
+                        <p>Layanan Fast</p>
+                        <strong>Rp34.000</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="suntikManualPage" class="suntik-manual-page">
+            <header>
+                <a href="#" id="backToMainFromSuntikManual">← Kembali</a>
+                <h1>Suntik Manual</h1>
+            </header>
+            <div class="content">
+                <div class="product-category">
+                    <h2>Instagram Followers</h2>
+                    <p>Layanan untuk menambahkan followers Instagram secara manual.</p>
+                    <a href="#" class="button-suntik">Pilih Layanan</a>
+                </div>
+                <div class="product-category">
+                    <h2>Tik Tok Followers</h2>
+                    <p>Layanan untuk menambahkan followers TikTok secara manual.</p>
+                    <a href="#" class="button-suntik">Pilih Layanan</a>
+                </div>
+                </div>
+        </div>
+
+        <div id="viewTTOnlyPage">
+            <header>
+                <a href="#" id="backToMainFromViewTTOnly">← Kembali</a>
+                <h1>Pembelian</h1>
+            </header>
+            <nav class="navigation">
+                <a href="#" class="nav-item active">Pembelian</a>
+                <a href="#" class="nav-item">Riwayat</a>
+            </nav>
+            <div class="content">
+                <div class="balance">
+                    Saldo Anda <br>
+                    <strong>271 Triliun</strong>
+                </div>
+                <h2 class="category-title">TikTok Video Views</h2>
+                <div class="product-list">
+                    <div class="product-item" data-product-name="TikTok Views | Max Unlimited - FAST" data-price-per-100="12">
+                        <strong>TikTok Views | Max Unlimited - FAST</strong>
+                        <p>Minimal Pemesanan: 100.000</p>
+                        <p>Maximal Pemesanan: 2.147.483.647</p>
+                        <p><strong>Rp 12 per 1.000 View + 4p</strong></p>
+                    </div>
+                    <div class="product-item" data-product-name="Tik Tok Views | Max 200M 🚀" data-price-per-100="18">
+                        <strong>Tik Tok Views | Max 200M 🚀</strong>
+                        <p>Minimal Pemesanan: 100</p>
+                        <p>Maximal Pemesanan: 2.147.483.647</p>
+                        <p><strong>Rp 18 per 1.000 View + 4p</strong></p>
+                    </div>
+                    <div class="product-item" data-product-name="TikTok Views | Max Unlimited - FAST - Emergency" data-price-per-100="22">
+                        <strong>TikTok Views | Max Unlimited - FAST - Emergency</strong>
+                        <p>Minimal Pemesanan: 100</p>
+                        <p>Maximal Pemesanan: 2.147.483.647</p>
+                        <p><strong>Rp 22 per 1.000 View + 4p</strong></p>
+                    </div>
+                    <div class="product-item" data-product-name="TikTok Views | Max Unlimited - FASTEST" data-price-per-100="32">
+                        <strong>TikTok Views | Max Unlimited - FASTEST</strong>
+                        <p>Minimal Pemesanan: 100</p>
+                        <p>Maximal Pemesanan: 2.147.483.647</p>
+                        <p><strong>Rp 32 per 1.000 View + 4p</strong></p>
+                    </div>
+                    <div class="product-item" data-product-name="TikTok Views | Max 100M" data-price-per-100="40">
+                        <strong>TikTok Views | Max 100M</strong>
+                        <p>Minimal Pemesanan: 100</p>
+                        <p>Maximal Pemesanan: 2.147.483.647</p>
+                        <p><strong>Rp 40 per 1.000 View + 4p</strong></p>
+                    </div>
+                    <div class="product-item" data-product-name="TikTok Views | Max 1M - INSTANT" data-price-per-100="46">
+                        <strong>TikTok Views | Max 1M - INSTANT</strong>
+                        <p>Minimal Pemesanan: 100</p>
+                        <p>Maximal Pemesanan: 10.000.000</p>
+                        <p><strong>Rp 46 per 1.000 View + 4p</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="buyViewTTPage">
+            <header>
+                <a href="#" id="backToViewTTOnly">← Kembali</a>
+                <h1>Pembelian</h1>
+            </header>
+            <div class="content">
+                <div class="form-group">
+                    <label for="linkVideo">Masukan Link Vidio Target</label>
+                    <input type="text" id="linkVideo" placeholder="https://vt.tiktok.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="jumlah">Jumlah</label>
+                    <input type="number" id="jumlah" value="0" min="0">
+                </div>
+                <div class="total-bayar">
+                    Total Bayar: Rp 0
+                </div>
+                <div class="form-group">
+                    <label for="deskripsi">Deskripsi</label>
+                    <input type="text" id="deskripsi" value="" readonly>
+                </div>
+                <a href="#" id="beliSekarangViewTT" class="button-beli">Beli Sekarang</a>
+            </div>
+        </div>
+
+        <div id="panelBotPage">
+            <header>
+                <a href="#" id="backToMainFromPanelBot">← Kembali</a>
+                <h1>Pembelian Panel</h1>
+            </header>
+            <div class="content">
+                <div class="form-group">
+                    <label for="jumlahPanel">Jumlah</label>
+                    <input type="number" id="jumlahPanel" value="0" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="namaPanel">Nama Panel</label>
+                    <input type="text" id="namaPanel" placeholder="Nama Panel Anda">
+                </div>
+                <div class="form-group">
+                    <label for="cpuPanel">CPU Panel</label>
+                    <input type="text" id="cpuPanel" placeholder="Spesifikasi CPU">
+                </div>
+                <div class="form-group">
+                    <label for="ramPanel">RAM Panel</label>
+                    <input type="text" id="ramPanel" placeholder="Spesifikasi RAM">
+                </div>
+                <div class="form-group">
+                    <label for="storagePanel">Storage Panel</label>
+                    <input type="text" id="storagePanel" placeholder="Spesifikasi Storage">
+                </div>
+                <a href="#" id="beliSekarangPanelBot" class="button-beli">Beli Sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nokosButton = document.getElementById('nokosButton');
+        const mainPage = document.getElementById('mainPage');
+        const nokosPage = document.getElementById('nokosPage');
+        const backToMainButton = document.getElementById('backToMain');
+        const nokosDetails = document.getElementById('nokosDetails');
+        const telegramLink = document.getElementById('telegramLink');
+        const premAppsButton = document.getElementById('premAppsButton');
+        const premiumAppsPage = document.getElementById('premiumAppsPage');
+        const backToMainFromPremAppsButton = document.getElementById('backToMainFromPremApps');
+        const youtubeAppItem = document.getElementById('youtubeAppItem');
+        const youtubePremiumPage = document.getElementById('youtubePremiumPage');
+        const backToPremAppsButton = document.getElementById('backToPremApps');
+        const allButtons = document.querySelectorAll('.main-page .category-item');
+        const suntikManualButtons = Array.from(document.querySelectorAll('.main-page .category-item span')).filter(span => span.textContent === 'Suntik Manual');
+        const suntikManualPage = document.getElementById('suntikManualPage');
+        const backToMainFromSuntikManualButton = document.getElementById('backToMainFromSuntikManual');
+        const saldoInfoDiv = document.querySelector('.main-page .saldo-info');
+        const viewTTOnlyButton = document.getElementById('viewTTOnlyButton');
+        const viewTTOnlyPage = document.getElementById('viewTTOnlyPage');
+        const backToMainFromViewTTOnlyButton = document.getElementById('backToMainFromViewTTOnly');
+        const productItemsViewTT = document.querySelectorAll('#viewTTOnlyPage .product-item');
+        const buyViewTTPage = document.getElementById('buyViewTTPage');
+        const backToViewTTOnlyButton = document.getElementById('backToViewTTOnly');
+        const linkVideoInput = document.getElementById('linkVideo');
+        const jumlahInput = document.getElementById('jumlah');
+        const totalBayarDiv = document.querySelector('#buyViewTTPage .total-bayar');
+        const deskripsiInput = document.getElementById('deskripsi');
+        const beliSekarangViewTTButton = document.getElementById('beliSekarangViewTT');
+        const nokosPriceElement = document.getElementById('nokosPrice');
+        const panelBotButton = document.getElementById('panelBotButton');
+        const panelBotPage = document.getElementById('panelBotPage');
+        const backToMainFromPanelBotButton = document.getElementById('backToMainFromPanelBot');
+        const beliSekarangPanelBotButton = document.getElementById('beliSekarangPanelBot');
+        const jumlahPanelInput = document.getElementById('jumlahPanel');
+        const namaPanelInput = document.getElementById('namaPanel');
+        const cpuPanelInput = document.getElementById('cpuPanel');
+        const ramPanelInput = document.getElementById('ramPanel');
+        const storagePanelInput = document.getElementById('storagePanel');
+        const bantuanButton = document.getElementById('bantuanButton');
+        const bantuanPage = document.getElementById('bantuanPage');
+        const backToMainFromBantuanButton = document.getElementById('backToMainFromBantuan');
+        const nokosStockElement = document.getElementById('nokosStock');
+        const nokosPurchaseForm = document.getElementById('nokosPurchaseForm');
+        const quantityInput = document.getElementById('quantity');
+        const totalPaymentSpan = document.getElementById('totalPayment');
+        const buyNokosButton = document.getElementById('buyNokosButton');
+        const smmPanel1Button = Array.from(document.querySelectorAll('.main-page .category-item span')).find(span => span.textContent === 'SMM Panel 1');
+        const smmPanel1Page = document.getElementById('smmPanel1Page');
+        const backToMainFromSMM1Button = document.getElementById('backToMainFromSMM1');
+
+        let selectedProduct = null;
+        let pricePer100Views = 0;
+        let selectedCountryData = null;
+
+        const saldoStrong = saldoInfoDiv.querySelector('strong');
+        if (saldoStrong) {
+            saldoStrong.textContent = '271 Triliun';
+        }
+
+        const saldoInfoChildren = Array.from(saldoInfoDiv.children);
+        if (saldoInfoChildren.length > 1) {
+            saldoInfoDiv.removeChild(saldoInfoChildren[1]);
+        }
+
+        allButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.id !== 'nokosButton' && button.id !== 'premAppsButton' && button.id !== 'viewTTOnlyButton' && button.id !== 'panelBotButton' && !button.querySelector('span').textContent.includes("Suntik Manual") && button.querySelector('span').textContent !== 'Vps' && button.querySelector('span').textContent !== 'SMM Panel 1') {
+                    alert(`Tombol "${button.querySelector('span').textContent}" diklik!`);
+                }
+            });
+        });
+
+        if (smmPanel1Button) {
+            const smmPanel1ButtonItem = smmPanel1Button.parentNode;
+            smmPanel1ButtonItem.addEventListener('click', () => {
+                mainPage.style.display = 'none';
+                smmPanel1Page.style.display = 'block';
+            });
+        } else {
+            console.error('Tombol SMM Panel 1 tidak ditemukan.');
+        }
+
+        if (backToMainFromSMM1Button) {
+            backToMainFromSMM1Button.addEventListener('click', () => {
+                smmPanel1Page.style.display = 'none';
+                mainPage.style.display = 'block';
+            });
+        } else {
+            console.error('Tombol Kembali dari SMM Panel 1 tidak ditemukan.');
+        }
+
+        suntikManualButtons.forEach(buttonSpan => {
+            const buttonItem = buttonSpan.parentNode;
+            buttonItem.addEventListener('click', () => {
+                mainPage.style.display = 'none';
+                suntikManualPage.style.display = 'block';
+            });
+        });
+
+        backToMainFromSuntikManualButton.addEventListener('click', () => {
+            suntikManualPage.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+
+        nokosButton.addEventListener('click', () => {
+            mainPage.style.display = 'none';
+            nokosPage.style.display = 'block';
+            nokosDetails.style.display = 'none';
+            nokosPurchaseForm.style.display = 'none';
+        });
+
+        backToMainButton.addEventListener('click', () => {
+            nokosPage.style.display = 'none';
+            mainPage.style.display = 'block';
+            nokosDetails.style.display = 'none';
+            nokosPurchaseForm.style.display = 'none';
+            nokosPriceElement.textContent = 'Harga: ';
+            nokosStockElement.textContent = '';
+            selectedCountryData = null;
+        });
+
+        const countryItems = document.querySelectorAll('#nokosPage .country-item');
+        countryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                countryItems.forEach(otherItem => {
+                    otherItem.classList.remove('selected');
+                });
+                item.classList.add('selected');
+                nokosDetails.style.display = 'block';
+                nokosPurchaseForm.style.display = 'block';
+                const country = item.dataset.country;
+                const price = parseInt(item.dataset.price);
+                const stock = item.querySelector('.stock').textContent;
+
+                selectedCountryData = {
+                    country: country,
+                    price: price,
+                    stock: stock
+                };
+
+                nokosPriceElement.textContent = `Harga: Rp ${price.toLocaleString()}`;
+                nokosStockElement.textContent = stock;
+                updateTotalPayment();
+            });
+        });
+
+        quantityInput.addEventListener('input', updateTotalPayment);
+
+        function updateTotalPayment() {
+            if (selectedCountryData && quantityInput.value) {
+                const quantity = parseInt(quantityInput.value);
+                const total = quantity * selectedCountryData.price;
+                totalPaymentSpan.textContent = `Rp ${total.toLocaleString()}`;
+            } else {
+                totalPaymentSpan.textContent = 'Rp 0';
+            }
+        }
+
+        buyNokosButton.addEventListener('click', () => {
+            if (selectedCountryData && quantityInput.value) {
+                const quantity = parseInt(quantityInput.value);
+                const totalPayment = totalPaymentSpan.textContent;
+                const premiumEmojis = '💎✨👑';
+
+                const telegramMessage = `🔥 *PESANAN NOKOS* 🔥 ⭐ ${premiumEmojis}\n\n🌍 *Negara:* ${selectedCountryData.country.toLowerCase()}\n🔢 *Jumlah:* ${quantity}\n💰 *Total Pembayaran:* ${totalPayment}\n\nTerima kasih telah order di Ravaelstore! 🙏`;
+                const telegramUrl = `https://t.me/RavaeIStore?text=${encodeURIComponent(telegramMessage)}`;
+                window.open(telegramUrl, '_blank');
+            } else {
+                alert('Pilih negara dan masukkan jumlah Nokos yang ingin dibeli.');
+            }
+        });
+
+        premAppsButton.addEventListener('click', () => {
+            mainPage.style.display = 'none';
+            premiumAppsPage.style.display = 'block';
+        });
+
+        backToMainFromPremAppsButton.addEventListener('click', () => {
+            premiumAppsPage.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+
+        youtubeAppItem.addEventListener('click', () => {
+            premiumAppsPage.style.display = 'none';
+            youtubePremiumPage.style.display = 'block';
+        });
+
+        backToPremAppsButton.addEventListener('click', () => {
+            youtubePremiumPage.style.display = 'none';
+            premiumAppsPage.style.display = 'block';
+        });
+
+        const vpsButton = Array.from(document.querySelectorAll('.main-page .category-item span')).find(span => span.textContent === 'Vps');
+        if (vpsButton) {
+            const vpsButtonItem = vpsButton.parentNode;
+            vpsButtonItem.addEventListener('click', () => {
+                alert('Layanan Sudah Dihapus Silahkan Pakai Layanan Yang Lain');
+            });
+        } else {
+            console.error('Tombol Vps tidak ditemukan.');
+        }
+
+        viewTTOnlyButton.addEventListener('click', () => {
+            mainPage.style.display = 'none';
+            viewTTOnlyPage.style.display = 'block';
+        });
+
+        backToMainFromViewTTOnlyButton.addEventListener('click', () => {
+            viewTTOnlyPage.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+
+        productItemsViewTT.forEach(item => {
+            item.addEventListener('click', () => {
+                selectedProduct = item.dataset.productName;
+                pricePer100Views = parseInt(item.dataset.pricePer100);
+                deskripsiInput.value = selectedProduct;
+                viewTTOnlyPage.style.display = 'none';
+                buyViewTTPage.style.display = 'block';
+                jumlahInput.value = 0;
+                totalBayarDiv.textContent = 'Total Bayar: Rp 0';
+                linkVideoInput.value = '';
+            });
+        });
+
+        backToViewTTOnlyButton.addEventListener('click', () => {
+            buyViewTTPage.style.display = 'none';
+            viewTTOnlyPage.style.display = 'block';
+        });
+
+        jumlahInput.addEventListener('input', () => {
+            const jumlah = parseInt(jumlahInput.value);
+            if (!isNaN(jumlah)) {
+                const totalHarga = jumlah * 0.5;
+                totalBayarDiv.textContent = `Total Bayar: ${totalHarga} p`;
+            } else {
+                totalBayarDiv.textContent = 'Total Bayar: Rp 0';
+            }
+        });
+
+        beliSekarangViewTTButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const linkVideo = linkVideoInput.value.trim();
+            const jumlah = jumlahInput.value.trim();
+            const deskripsi = deskripsiInput.value.trim();
+            const totalBayarText = totalBayarDiv.textContent;
+            const totalHarga = totalBayarText.includes(':') ? totalBayarText.split(': ')[1] : totalBayarText;
+            const premiumEmojis = '💎✨👑'; // Contoh emoji premium
+
+            if (!linkVideo) {
+                alert('Link Video TikTok harus diisi.');
+                return;
+            }
+
+            if (!jumlah || parseInt(jumlah) <= 0) {
+                alert('Jumlah harus diisi dan lebih dari 0.');
+                return;
+            }
+
+            const orderText = `🔥 *PESANAN VIEW TIKTOK* 🔥 ⭐ ${premiumEmojis}\n\n🔗 *Link Video:* ${linkVideo}\n🔢 *Jumlah:* ${jumlah}\n📝 *Deskripsi:* ${deskripsi}\n💰 *Total Bayar:* ${totalHarga}\n\nTerima kasih telah order di Ravaelstore! 🙏`;
+
+            const whatsappNumber = '6282118257071';
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderText)}`;
+
+            navigator.clipboard.writeText(orderText).then(() => {
+                window.location.href = whatsappUrl;
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+                alert('❌ Gagal mengarahkan ke WhatsApp. Silakan coba lagi.');
+            });
+        });
+
+        if (panelBotButton) {
+            panelBotButton.addEventListener('click', () => {
+                mainPage.style.display = 'none';
+                panelBotPage.style.display = 'block';
+            });
+        } else {
+            console.error('Tombol Panel Bot tidak ditemukan.');
+        }
+
+        backToMainFromPanelBotButton.addEventListener('click', () => {
+            panelBotPage.style.display = 'none';
+            mainPage.style.display = 'block';
+            jumlahPanelInput.value = 0;
+            namaPanelInput.value = '';
+            cpuPanelInput.value = '';
+            ramPanelInput.value = '';
+            storagePanelInput.value = '';
+        });
+
+        beliSekarangPanelBotButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const jumlah = jumlahPanelInput.value.trim();
+            const namaPanel = namaPanelInput.value.trim();
+            const cpuPanel = cpuPanelInput.value.trim();
+            const ramPanel = ramPanelInput.value.trim();
+            const storagePanel = storagePanelInput.value.trim();
+            const premiumEmojis = '💎✨👑'; // Emoji premium untuk Panel Bot
+
+            if (!jumlah || parseInt(jumlah) <= 0) {
+                alert('Jumlah harus diisi dan lebih dari 0.');
+                return;
+            }
+
+            const whatsappMessage = `🔥 *PESANAN PANEL BOT* 🔥 ⭐ ${premiumEmojis}\n\n📦 *Jumlah:* ${jumlah}\n🏷️ *Nama Panel:* ${namaPanel}\n⚙️ *CPU Panel:* ${cpuPanel}\n💾 *RAM Panel:* ${ramPanel}\n💾 *Storage Panel:* ${storagePanel}\n\nTerima kasih telah order di Ravaelstore! 🙏`;
+            const whatsappNumber = '6282118257071';
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Perbarui teks dan hapus tombol di main page
+        const userInfoDiv = document.querySelector('.main-page .user-info .user-details');
+        if (userInfoDiv) {
+            const h1Element = userInfoDiv.querySelector('h1');
+            const pElement = userInfoDiv.querySelector('p');
+            if (h1Element) {
+                h1Element.textContent = 'Halo Sobat Ravaelstore';
+            }
+            if (pElement) {
+                pElement.textContent = ''; // Mengosongkan nomor
+            }
+        }
+
+        const headerActionsDiv = document.querySelector('.main-page .header-actions');
+        if (headerActionsDiv) {
+            const links = headerActionsDiv.querySelectorAll('a');
+            links.forEach(link => {
+                if (link.textContent.trim() === 'Refresh Saldo' || link.textContent.trim() === 'Mutasi Saldo') {
+                    link.remove();
+                }
+            });
+        }
+
+        const quickActionsDiv = document.querySelector('.main-page .quick-actions');
+        if (quickActionsDiv) {
+            const links = quickActionsDiv.querySelectorAll('a');
+            links.forEach(link => {
+                if (link.textContent.trim() === 'Mutasi Saldo') {
+                    link.remove();
+                }
+            });
+        }
+
+        bantuanButton.addEventListener('click', () => {
+            mainPage.style.display = 'none';
+            bantuanPage.style.display = 'block';
+        });
+
+        backToMainFromBantuanButton.addEventListener('click', () => {
+            bantuanPage.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+
+        // Hapus elemen "Ingin membeli?" dan link "Klik Disini" dari halaman Nokos
+        const nokosContent = document.querySelector('#nokosPage .content');
+        if (nokosContent) {
+            const lastParagraph = nokosContent.lastElementChild;
+            if (lastParagraph && lastParagraph.tagName === 'P' && lastParagraph.textContent.includes('Ingin membeli?')) {
+                nokosContent.removeChild(lastParagraph);
+            }
+        }
+    </script>
+</body>
+</html>
