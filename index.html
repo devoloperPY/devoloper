@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>All-in-One Downloader</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@formkit/auto-animate@0.8.2/index.global.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+
+    <div id="main-hub-page" class="page">
+        <header class="main-header flex items-center justify-between px-4 py-3 border-b">
+            <h1 class="font-extrabold text-lg select-none">All-in-One Downloader</h1>
+            <div class="flex items-center space-x-2">
+                <button id="show-settings-button" class="header-button">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="show-queue-button" class="header-button">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button id="show-history-button" class="header-button">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="theme-toggle-button" class="header-button">
+                    <i id="theme-icon" class="fas"></i>
+               </button>
+            </div>
+        </header>
+        <main class="p-4">
+            <ul class="feature-grid">
+                <li>
+                    <a href="#" id="show-tts-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #4A90E2;"><i class="fas fa-volume-up text-2xl"></i></div>
+                        <div class="flex-1 min-w-0">
+                            <h2 class="font-bold truncate text-lg">Text to Speech</h2>
+                            <p class="text-sm truncate">Ubah teks menjadi berbagai suara unik</p>
+                        </div>
+                        <span class="api-status" data-api-id="tts"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-tiktok-v2-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-black"><i class="fab fa-tiktok text-2xl"></i><span class="absolute bottom-0 right-0 text-xs bg-blue-600 text-white font-bold rounded-full px-1 py-0.5">V2</span></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">TikTok Downloader V2</h2><p class="text-sm truncate">HD, No WM, dan Audio MP3</p></div>
+                        <span class="api-status" data-api-id="tiktok-v2"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-instagram-v2-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"><i class="fab fa-instagram text-2xl"></i><span class="absolute bottom-0 right-0 text-xs bg-blue-600 text-white font-bold rounded-full px-1 py-0.5">V2</span></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Instagram Downloader V2</h2><p class="text-sm truncate">Support Postingan Carousel</p></div>
+                        <span class="api-status" data-api-id="instagram-v2"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-pinterest-v2-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #E60023;"><i class="fab fa-pinterest text-2xl"></i><span class="absolute bottom-0 right-0 text-xs bg-blue-600 text-white font-bold rounded-full px-1 py-0.5">V2</span></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Pinterest Downloader V2</h2><p class="text-sm truncate">Download Video/Gambar dari URL</p></div>
+                        <span class="api-status" data-api-id="pinterest-v2"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-snackvideo-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #FFC400;"><i class="fas fa-play-circle text-2xl text-black"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Snack Video Downloader</h2><p class="text-sm truncate">Unduh video dari URL Snack Video</p></div>
+                        <span class="api-status" data-api-id="snackvideo"></span>
+                    </a>
+                </li>
+                
+                <li>
+    <a href="#" id="show-admin-feature" class="flex items-center space-x-3 rounded-lg p-3">
+        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #343a40;">
+            <i class="fas fa-user-shield text-2xl"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h2 class="font-bold truncate text-lg">Khusus Admin</h2>
+            <p class="text-sm truncate">Fitur pencarian personal</p>
+        </div>
+    </a>
+</li>
+                
+                 <li>
+                    <a href="#" id="show-facebook-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #1877F2;"><i class="fab fa-facebook-f text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Facebook Downloader</h2><p class="text-sm truncate">Unduh video dari URL Facebook</p></div>
+                        <span class="api-status" data-api-id="facebook"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-spotify-downloader-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #1DB954;"><i class="fab fa-spotify text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Spotify Downloader</h2><p class="text-sm truncate">Download lagu dari URL Spotify</p></div>
+                        <span class="api-status" data-api-id="spotify-dl"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-spotify-search-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #1DB954;"><i class="fas fa-search text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Cari Lagu Spotify</h2><p class="text-sm truncate">Cari dan download lagu dari Spotify</p></div>
+                        <span class="api-status" data-api-id="spotify-search"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-gimage-search-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-blue-500"><i class="fab fa-google text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Pencarian Gambar</h2><p class="text-sm truncate">Cari gambar dari Google</p></div>
+                        <span class="api-status" data-api-id="gimage"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-playstore-search-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-gray-200"><i class="fab fa-google-play text-2xl text-gray-800"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Cari di Play Store</h2><p class="text-sm truncate">Temukan aplikasi di Google Play Store</p></div>
+                        <span class="api-status" data-api-id="playstore"></span>
+                    </a>
+                </li>
+                
+                <li>
+    <a href="#" id="show-admin-download" class="flex items-center space-x-3 rounded-lg p-3">
+        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #c82333;">
+            <i class="fas fa-lock text-2xl"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h2 class="font-bold truncate text-lg">Admin Downloader</h2>
+            <p class="text-sm truncate">Download dari URL khusus</p>
+        </div>
+    </a>
+</li>
+                
+                <li>
+                    <a href="#" id="show-fdroid-search-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #1976D2;"><i class="fas fa-robot text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Cari di F-Droid</h2><p class="text-sm truncate">Temukan aplikasi open source di F-Droid</p></div>
+                        <span class="api-status" data-api-id="fdroid"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-youtube-v2-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #FF0000;"><i class="fab fa-youtube text-2xl"></i><span class="absolute bottom-0 right-0 text-xs bg-gray-600 text-white font-bold rounded-full px-1 py-0.5">V2-Old</span></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">YouTube Downloader V2</h2><p class="text-sm truncate">Pilih kualitas video & audio (MP3)</p></div>
+                        <span class="api-status" data-api-id="youtube-v2"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-tiktok-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-black"><i class="fab fa-tiktok text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">TikTok Downloader (BY VINTEX)</h2><p class="text-sm truncate">Unduh video & audio dari URL TikTok</p></div>
+                        <span class="api-status" data-api-id="tiktok-vintex"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-youtube-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #FF0000;"><i class="fab fa-youtube text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">YouTube Downloader (BY VINTEX)</h2><p class="text-sm truncate">Unduh video (MP4) & audio (MP3)</p></div>
+                        <span class="api-status" data-api-id="youtube-vintex"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-instagram-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"><i class="fab fa-instagram text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Instagram Downloader (BY VINTEX)</h2><p class="text-sm truncate">Unduh video & gambar dari URL Instagram</p></div>
+                        <span class="api-status" data-api-id="instagram-vintex"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-pinterest-downloader" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #E60023;"><i class="fab fa-pinterest text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Pinterest Downloader (BY VINTEX)</h2><p class="text-sm truncate">Cari & unduh gambar dari Pinterest</p></div>
+                        <span class="api-status" data-api-id="pinterest-vintex"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-ssweb-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #28a745;"><i class="fas fa-camera text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Website Screenshot</h2><p class="text-sm truncate">Ambil tangkapan layar PC & Mobile</p></div>
+                        <span class="api-status" data-api-id="ssweb"></span>
+                    </a>
+                </li>
+                
+                <li>
+    <a href="#" id="show-openai-chat-page" class="flex items-center space-x-3 rounded-lg p-3">
+        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #10a37f;">
+            <i class="fas fa-brain text-2xl"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h2 class="font-bold truncate text-lg">AI Chat (OpenAI)</h2>
+            <p class="text-sm truncate">Tanya apa saja, dapatkan jawaban lengkap</p>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="#" id="show-multimodel-chat-page" class="flex items-center space-x-3 rounded-lg p-3">
+        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #5865f2;">
+            <i class="fas fa-comments text-2xl"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <h2 class="font-bold truncate text-lg">Multi-Model Chatbot</h2>
+            <p class="text-sm truncate">Pilih model AI untuk menjawab pertanyaan</p>
+        </div>
+    </a>
+</li>
+                
+                <li>
+                    <a href="#" id="show-hostinfo-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #ffc107;"><i class="fas fa-server text-2xl text-black"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Host Info</h2><p class="text-sm truncate">Dapatkan detail informasi host</p></div>
+                        <span class="api-status" data-api-id="hostinfo"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-toghibli-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #6a0dad;"><i class="fas fa-palette text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">To Ghibli</h2><p class="text-sm truncate">Ubah gambar ke gaya Ghibli</p></div>
+                        <span class="api-status" data-api-id="toghibli"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-remini-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #dc3545;"><i class="fas fa-magic text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Remini (Enhance)</h2><p class="text-sm truncate">Perbaiki kualitas gambar</p></div>
+                        <span class="api-status" data-api-id="remini"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-upscale-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #17a2b8;"><i class="fas fa-search-plus text-2xl"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Upscale Image</h2><p class="text-sm truncate">Perbesar resolusi gambar</p></div>
+                        <span class="api-status" data-api-id="upscale"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-random-waifu-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #f7a2d0;"><i class="fas fa-venus text-2xl text-pink-800"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Random Waifu</h2><p class="text-sm truncate">Dapatkan gambar waifu secara acak</p></div>
+                        <span class="api-status" data-api-id="random-waifu"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-random-nsfw-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #f28b8b;"><i class="fas fa-fire text-2xl text-red-800"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Random NSFW</h2><p class="text-sm truncate">Dapatkan gambar NSFW secara acak</p></div>
+                        <span class="api-status" data-api-id="random-nsfw"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="show-random-papayang-page" class="flex items-center space-x-3 rounded-lg p-3">
+                        <div class="relative flex items-center justify-center rounded-full w-12 h-12" style="background-color: #a2d2ff;"><i class="fas fa-image text-2xl text-blue-800"></i></div>
+                        <div class="flex-1 min-w-0"><h2 class="font-bold truncate text-lg">Random Papayang</h2><p class="text-sm truncate">Dapatkan gambar Papayang secara acak</p></div>
+                        <span class="api-status" data-api-id="random-papayang"></span>
+                    </a>
+                </li>
+            </ul>
+        </main>
+    </div>
+
+    <div id="tts-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Text to Speech</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="tts-text-input" class="block text-sm mb-2">Teks Anda</label><textarea id="tts-text-input" rows="4" class="rounded-md px-3 py-2 w-full" placeholder="Ketik kalimat yang ingin diubah menjadi suara di sini..."></textarea></div><button id="fetch-tts-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Ubah ke Suara</button><div id="tts-result-area" class="mt-6"></div></main>
+    </div>
+    
+    <div id="tiktok-v2-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">TikTok Downloader V2</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="tiktok-v2-url-input" class="block text-sm mb-2">URL Video TikTok</label><input type="text" id="tiktok-v2-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL TikTok di sini..."></div><button id="fetch-tiktok-v2-button" class="w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="tiktok-v2-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="instagram-v2-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Instagram Downloader V2</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="instagram-v2-url-input" class="block text-sm mb-2">URL Post Instagram</label><input type="text" id="instagram-v2-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL Instagram di sini..."></div><button id="fetch-instagram-v2-button" class="w-full bg-pink-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="instagram-v2-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="pinterest-v2-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Pinterest Downloader V2</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="pinterest-v2-url-input" class="block text-sm mb-2">URL Pin Pinterest</label><input type="text" id="pinterest-v2-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL Pin di sini..."></div><button id="fetch-pinterest-v2-button" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="pinterest-v2-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="snackvideo-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Snack Video Downloader</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="snackvideo-url-input" class="block text-sm mb-2">URL Snack Video</label><input type="text" id="snackvideo-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL Snack Video di sini..."></div><button id="fetch-snackvideo-button" class="w-full font-bold py-2 px-4 rounded-lg" style="background-color: #FFC400; color: black;">Download</button><div id="snackvideo-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="facebook-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Facebook Downloader</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="facebook-url-input" class="block text-sm mb-2">URL Video Facebook</label><input type="text" id="facebook-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL Facebook di sini..."></div><button id="fetch-facebook-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="facebook-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="spotify-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Spotify Downloader</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="spotify-url-input" class="block text-sm mb-2">URL Lagu Spotify</label><input type="text" id="spotify-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL lagu Spotify di sini..."></div><button id="fetch-spotify-button" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="spotify-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="spotify-search-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Cari Lagu Spotify</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4">
+            <div class="mb-4"><label for="spotify-search-query" class="block text-sm mb-2">Judul atau Artis</label><input type="text" id="spotify-search-query" class="rounded-md px-3 py-2 w-full" placeholder="Ketik judul lagu..."></div>
+            <button id="search-spotify-button" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Cari</button>
+            <div id="spotify-player-container" class="hidden sticky top-0 p-3 rounded-lg mt-4 shadow-lg z-10"><p id="spotify-player-title" class="text-center font-semibold text-sm truncate mb-2"></p><audio id="spotify-audio-player" controls class="w-full"></audio></div>
+            <div id="spotify-search-result-area" class="mt-6"></div>
+            <div id="spotify-load-more-container" class="mt-4 text-center"></div>
+        </main>
+    </div>
+
+<div id="admin-downloader-page" class="page hidden flex flex-col h-screen">
+    <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+        <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+        <div class="ml-3"><h2 class="text-md font-semibold">Admin Downloader</h2></div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-4">
+        <div class="mb-4">
+            <label for="admin-download-url" class="block text-sm mb-2">URL Khusus</label>
+            <input type="text" id="admin-download-url" class="rounded-md px-3 py-2 w-full" placeholder="Masukkan URL...">
+        </div>
+        <button id="fetch-admin-download-button" class="w-full bg-red-700 text-white font-bold py-2 px-4 rounded-lg">Proses Link</button>
+        <div id="admin-download-result-area" class="mt-6"></div>
+    </main>
+</div>
+
+    <div id="gimage-search-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Pencarian Gambar</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="gimage-search-query" class="block text-sm mb-2">Kata Kunci</label><input type="text" id="gimage-search-query" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: kucing lucu"></div><button id="search-gimage-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Cari Gambar</button>
+            <div id="gimage-search-result-area" class="mt-6"></div>
+            <div id="gimage-load-more-container" class="mt-4 text-center"></div>
+        </main>
+    </div>
+
+    <div id="playstore-search-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Cari di Play Store</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="playstore-search-query" class="block text-sm mb-2">Nama Aplikasi</label><input type="text" id="playstore-search-query" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: Free Fire"></div><button id="search-playstore-button" class="w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg">Cari Aplikasi</button><div id="playstore-search-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="fdroid-search-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Cari di F-Droid</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="fdroid-search-query" class="block text-sm mb-2">Nama Aplikasi</label><input type="text" id="fdroid-search-query" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: Termux"></div><button id="search-fdroid-button" class="w-full bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Cari Aplikasi</button><div id="fdroid-search-result-area" class="mt-6"></div></main>
+    </div>
+
+<div id="openai-chat-page" class="page hidden flex flex-col h-screen">
+    <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+        <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+        <div class="ml-3"><h2 class="text-md font-semibold">AI Chat (OpenAI)</h2></div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-4">
+        <div class="mb-4">
+            <label for="openai-prompt-input" class="block text-sm mb-2">Pertanyaan Anda</label>
+            <textarea id="openai-prompt-input" rows="3" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: buatkan saya puisi tentang kopi..."></textarea>
+        </div>
+        <button id="fetch-openai-button" class="w-full bg-teal-500 text-white font-bold py-2 px-4 rounded-lg">Kirim</button>
+        <div class="mt-6">
+            <h3 class="font-bold mb-2">Jawaban AI:</h3>
+            <pre id="openai-result-area" class="text-sm whitespace-pre-wrap p-4 rounded-lg"></pre>
+        </div>
+    </main>
+</div>
+
+<div id="multimodel-chat-page" class="page hidden flex flex-col h-screen">
+    <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+        <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+        <div class="ml-3"><h2 class="text-md font-semibold">Multi-Model Chatbot</h2></div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-4">
+        <div class="mb-4">
+            <label for="multimodel-prompt-input" class="block text-sm mb-2">Pertanyaan Anda</label>
+            <textarea id="multimodel-prompt-input" rows="3" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: buatkan muka tersenyum lebar..."></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="multimodel-select" class="block text-sm mb-2">Pilih Model AI</label>
+            <select id="multimodel-select" class="w-full rounded-md px-3 py-2">
+                <option value="metaai">Meta AI</option>
+                <option value="gpt4">ChatGPT-4</option>
+                <option value="deepseek">DeepSeek</option>
+            </select>
+        </div>
+        <button id="fetch-multimodel-button" class="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg">Kirim</button>
+        <div class="mt-6">
+            <h3 class="font-bold mb-2">Jawaban AI:</h3>
+            <div id="multimodel-result-area" class="p-4 rounded-lg"></div>
+        </div>
+    </main>
+</div>
+
+    <div id="tiktok-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">TikTok Downloader (BY VINTEX)</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="tiktok-url-input" class="block text-sm mb-2">URL Video TikTok</label><input type="text" id="tiktok-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL TikTok di sini..."></div><div class="mb-4"><label for="tiktok-custom-filename" class="block text-sm mb-2">Nama File Kustom (Opsional)</label><input type="text" id="tiktok-custom-filename" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: video_lucu_pertama"></div><button id="fetch-tiktok-video-button" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="tiktok-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="youtube-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">YouTube Downloader (BY VINTEX)</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="youtube-url-input" class="block text-sm mb-2">URL Video YouTube</label><input type="text" id="youtube-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL YouTube di sini..."></div><div class="mb-4"><label for="youtube-custom-filename" class="block text-sm mb-2">Nama File Kustom (Opsional)</label><input type="text" id="youtube-custom-filename" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: review_gadget_terbaru"></div><div class="flex space-x-2"><button id="fetch-youtube-mp4-button" data-type="mp4" class="get-media-button flex-1 bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Get Video (MP4)</button><button id="fetch-youtube-mp3-button" data-type="mp3" class="get-media-button flex-1 bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Get Audio (MP3)</button></div><div id="youtube-result-area" class="mt-6"></div></main>
+    </div>
+
+<div id="admin-search-page" class="page hidden flex flex-col h-screen">
+    <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+        <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+        <div class="ml-3"><h2 class="text-md font-semibold">Pencarian Khusus</h2></div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-4">
+        <div class="mb-4">
+            <label for="admin-search-query" class="block text-sm mb-2">Kata Kunci</label>
+            <input type="text" id="admin-search-query" class="rounded-md px-3 py-2 w-full" placeholder="Masukkan kata kunci...">
+        </div>
+        <button id="search-admin-button" class="w-full bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">Cari</button>
+        <div id="admin-search-result-area" class="mt-6"></div>
+        <div id="admin-load-more-container" class="mt-4 text-center"></div>
+    </main>
+</div>
+
+    <div id="instagram-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Instagram Downloader (BY VINTEX)</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="instagram-url-input" class="block text-sm mb-2">URL Post Instagram</label><input type="text" id="instagram-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL Instagram di sini..."></div><div class="mb-4"><label for="instagram-custom-filename" class="block text-sm mb-2">Nama File Kustom (Opsional)</label><input type="text" id="instagram-custom-filename" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: liburan_bali_2025"></div><button id="fetch-instagram-media-button" class="w-full bg-pink-600 text-white font-bold py-2 px-4 rounded-lg">Download</button><div id="instagram-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="pinterest-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Pinterest Downloader (BY VINTEX)</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="pinterest-url-input" class="block text-sm mb-2">Kata Kunci atau URL Pin</label><input type="text" id="pinterest-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Cari gambar: 'wallpaper hd' atau tempel URL..."></div><div class="mb-4"><label for="pinterest-custom-filename" class="block text-sm mb-2">Nama File Kustom (Opsional)</label><input type="text" id="pinterest-custom-filename" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: resep_kue_enak"></div><button id="fetch-pinterest-media-button" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Download</button>
+            <div id="pinterest-result-area" class="mt-6"></div>
+            <div id="pinterest-load-more-container" class="mt-4 text-center"></div>
+        </main>
+    </div>
+
+    <div id="youtube-v2-downloader-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">YouTube Downloader V2</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="youtube-v2-url-input" class="block text-sm mb-2">URL Video YouTube</label><input type="text" id="youtube-v2-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL YouTube di sini..."></div><div class="mb-4"><label for="youtube-v2-custom-filename" class="block text-sm mb-2">Nama File Kustom (Opsional)</label><input type="text" id="youtube-v2-custom-filename" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: video_keren_v2"></div><button id="fetch-youtube-v2-options-button" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Cek Opsi Download</button><div id="youtube-v2-options-area" class="mt-6"></div><div id="youtube-v2-result-area" class="mt-4"></div></main>
+    </div>
+
+    <div id="ssweb-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Website Screenshot</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="ssweb-url-input" class="block text-sm mb-2">URL Website</label><input type="text" id="ssweb-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL website di sini..."></div><button id="fetch-ssweb-button" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Ambil Screenshot</button><div id="ssweb-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="hostinfo-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+            <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+            <div class="ml-3 flex-1"><h2 class="text-md font-semibold">Host Info</h2></div>
+            <button id="copy-hostinfo-button" class="text-sm bg-blue-600 text-white font-semibold py-1 px-3 rounded-lg mr-2">Salin</button>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="hostinfo-url-input" class="block text-sm mb-2">URL atau Domain</label><input type="text" id="hostinfo-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: google.com"></div><button id="fetch-hostinfo-button" class="w-full bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg">Dapatkan Info Host</button><div id="hostinfo-result-area" class="mt-6 hidden"></div></main>
+    </div>
+
+    <div id="toghibli-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">To Ghibli</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="toghibli-url-input" class="block text-sm mb-2">URL Gambar</label><input type="text" id="toghibli-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL gambar di sini..."></div><div class="mb-4"><label for="toghibli-prompt-input" class="block text-sm mb-2">Prompt (Opsional)</label><textarea id="toghibli-prompt-input" rows="2" class="rounded-md px-3 py-2 w-full" placeholder="Contoh: ubah menjadi pemandangan hutan"></textarea></div><button id="fetch-toghibli-button" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg">Ubah ke Ghibli</button><div id="toghibli-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="remini-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Remini (Enhance)</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="remini-url-input" class="block text-sm mb-2">URL Gambar</label><input type="text" id="remini-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL gambar di sini..."></div><button id="fetch-remini-button" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Enhance Gambar</button><div id="remini-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="upscale-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Upscale Image</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4"><div class="mb-4"><label for="upscale-url-input" class="block text-sm mb-2">URL Gambar</label><input type="text" id="upscale-url-input" class="rounded-md px-3 py-2 w-full" placeholder="Tempel URL gambar di sini..."></div><button id="fetch-upscale-button" class="w-full bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg">Upscale Gambar</button><div id="upscale-result-area" class="mt-6"></div></main>
+    </div>
+
+    <div id="random-waifu-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Random Waifu</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center"><div id="random-waifu-result-area" class="w-full max-w-sm rounded-lg p-4 text-center mb-4 min-h-[200px] flex items-center justify-center"><p>Tekan tombol di bawah untuk mendapatkan gambar waifu.</p></div><button id="fetch-random-waifu-button" class="w-full max-w-sm bg-pink-600 text-white font-bold py-2 px-4 rounded-lg">Ganti Gambar Waifu</button></main>
+    </div>
+
+    <div id="random-nsfw-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Random NSFW</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center"><div id="random-nsfw-result-area" class="w-full max-w-sm rounded-lg p-4 text-center mb-4 min-h-[200px] flex items-center justify-center"><p>Tekan tombol di bawah untuk mendapatkan gambar NSFW.</p></div><button id="fetch-random-nsfw-button" class="w-full max-w-sm bg-red-700 text-white font-bold py-2 px-4 rounded-lg">Ganti Gambar NSFW</button></main>
+    </div>
+
+    <div id="random-papayang-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0"><button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button><div class="ml-3"><h2 class="text-md font-semibold">Random Papayang</h2></div></header>
+        <main class="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center"><div id="random-papayang-result-area" class="w-full max-w-sm rounded-lg p-4 text-center mb-4 min-h-[200px] flex items-center justify-center"><p>Tekan tombol di bawah untuk mendapatkan gambar Papayang.</p></div><button id="fetch-random-papayang-button" class="w-full max-w-sm bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Ganti Gambar Papayang</button></main>
+    </div>
+
+    <div id="settings-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+            <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+            <div class="ml-3"><h2 class="text-md font-semibold">Pengaturan</h2></div>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4">
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Tampilan</h3>
+                    <div class="setting-item">
+                        <label for="theme-toggle-switch" class="flex-1">Tema Gelap</label>
+                        <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                            <input type="checkbox" name="theme-toggle-switch" id="theme-toggle-switch" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="theme-toggle-switch" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Data & Cache</h3>
+                    <div class="setting-item">
+                        <label for="results-per-page-input" class="flex-1">Hasil Per Halaman (Pagination)</label>
+                        <input type="number" id="results-per-page-input" class="w-16 text-center rounded-md p-1 border">
+                    </div>
+                    <div class="setting-item mt-4">
+                        <span class="flex-1">Cache API</span>
+                        <button id="clear-api-cache-button" class="setting-button bg-yellow-500">Bersihkan</button>
+                    </div>
+                    <div class="setting-item mt-4">
+                        <span class="flex-1">Riwayat Unduhan</span>
+                        <button id="clear-history-settings-button" class="setting-button bg-red-600">Bersihkan</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Tentang Aplikasi</h3>
+                    <div class="p-4 rounded-lg bg-gray-200 dark:bg-gray-800 text-sm">
+                        <p><strong>All-in-One Downloader</strong></p>
+                        <p>Versi 3.0 (Juni 2025)</p>
+                        <p class="mt-2">Dibuat dengan cinta untuk kemudahan Anda.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="queue-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+            <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+            <div class="ml-3"><h2 class="text-md font-semibold">Antrean Unduhan</h2></div>
+            <div class="ml-auto flex items-center space-x-2">
+                <button id="start-queue-button" class="setting-button bg-green-600">Mulai</button>
+                <button id="clear-completed-button" class="setting-button bg-red-600">Hapus Selesai</button>
+            </div>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4">
+            <div id="queue-list-area" class="space-y-3">
+            </div>
+        </main>
+    </div>
+
+    <div id="history-page" class="page hidden flex flex-col h-screen">
+        <header class="main-header flex items-center px-2 py-2 shadow-md flex-shrink-0">
+            <button class="back-button p-2 rounded-full"><i class="fas fa-arrow-left text-xl"></i></button>
+            <div class="ml-3"><h2 class="text-md font-semibold">Riwayat Unduhan</h2></div>
+            <button id="clear-history-button" class="ml-auto text-sm bg-red-600 text-white font-semibold py-1 px-3 rounded-lg">Bersihkan</button>
+        </header>
+        <main class="history-page-main"><div id="history-list-area" class="space-y-3"></div></main>
+    </div>
+
+    <div id="modal-overlay" class="page hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+        <div id="modal-widget" class="relative bg-gradient-to-br from-blue-400 to-indigo-500 w-full max-w-sm rounded-3xl shadow-2xl p-6 pt-12 text-center text-white">
+            <button id="close-modal-button" class="absolute -top-3 -right-3 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg font-bold text-xl">&times;</button>
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white rounded-full w-20 h-20 flex items-center justify-center shadow-xl"><i class="fab fa-whatsapp text-5xl text-green-500"></i></div>
+            <h3 class="text-2xl font-bold mb-2">Yuk, Gabung Grup Kami!</h3>
+            <p class="text-indigo-100 text-base mb-6">Dapatkan info & update terbaru, serta diskusi dengan anggota lain.</p>
+            <a href="https://chat.whatsapp.com/Fs51xgGlQQGFc169ppOTVd" target="_blank" class="block w-full bg-white text-indigo-600 font-bold py-3 px-4 rounded-xl">Tekan Sini</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
