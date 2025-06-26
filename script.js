@@ -79,6 +79,71 @@ document.getElementById('admin-load-more-container').addEventListener('click', (
     }
 });
     
+// Letakkan ini di bagian atas script.js
+const featureConfig = {
+    'tts': {
+        pageId: 'tts-page',
+        inputId: 'tts-text-input',
+        buttonId: 'fetch-tts-button'
+    },
+    'tiktok-v2': {
+        pageId: 'tiktok-v2-downloader-page',
+        inputId: 'tiktok-v2-url-input',
+        buttonId: 'fetch-tiktok-v2-button'
+    },
+    'instagram-v2': {
+        pageId: 'instagram-v2-downloader-page',
+        inputId: 'instagram-v2-url-input',
+        buttonId: 'fetch-instagram-v2-button'
+    },
+    'pinterest-v2': {
+        pageId: 'pinterest-v2-downloader-page',
+        inputId: 'pinterest-v2-url-input',
+        buttonId: 'fetch-pinterest-v2-button'
+    },
+    'snackvideo': {
+        pageId: 'snackvideo-downloader-page',
+        inputId: 'snackvideo-url-input',
+        buttonId: 'fetch-snackvideo-button'
+    },
+    'facebook': {
+        pageId: 'facebook-downloader-page',
+        inputId: 'facebook-url-input',
+        buttonId: 'fetch-facebook-button'
+    },
+    'spotify-dl': {
+        pageId: 'spotify-downloader-page',
+        inputId: 'spotify-url-input',
+        buttonId: 'fetch-spotify-button'
+    },
+    'youtube-v2': {
+        pageId: 'youtube-v2-downloader-page',
+        inputId: 'youtube-v2-url-input',
+        buttonId: 'fetch-youtube-v2-options-button'
+    },
+    // --- (Vintex) ---
+    'tiktok-vintex': {
+        pageId: 'tiktok-downloader-page',
+        inputId: 'tiktok-url-input',
+        buttonId: 'fetch-tiktok-video-button'
+    },
+    'youtube-vintex': {
+        pageId: 'youtube-downloader-page',
+        inputId: 'youtube-url-input',
+        buttonId: 'fetch-youtube-mp4-button' // Kita targetkan salah satu tombol saja
+    },
+    'instagram-vintex': {
+        pageId: 'instagram-downloader-page',
+        inputId: 'instagram-url-input',
+        buttonId: 'fetch-instagram-media-button'
+    },
+    'pinterest-vintex': {
+        pageId: 'pinterest-downloader-page',
+        inputId: 'pinterest-url-input',
+        buttonId: 'fetch-pinterest-media-button'
+    }
+    // Tambahkan fitur lain di sini jika perlu
+};
 
     
     const ttsTextInput = document.getElementById('tts-text-input'), fetchTtsButton = document.getElementById('fetch-tts-button'), ttsResultArea = document.getElementById('tts-result-area');
@@ -398,14 +463,59 @@ document.getElementById('admin-load-more-container').addEventListener('click', (
     }
 
     function createShareButtonHTML(options) {
-        if (navigator.share) {
-            const url = options.url || '';
-            const title = options.title || '';
-            const text = options.text || '';
-            return `<button class="share-button" data-url="${url}" data-title="${title}" data-text="${text}"><i class="fas fa-share-alt"></i></button>`;
-        }
-        return '';
+    if (navigator.share) {
+        // PERUBAHAN DI SINI: Kita tidak lagi menggunakan options.url secara langsung.
+        // Kita akan membuat link ke website kita sendiri dengan parameter.
+        // Contoh: https://websiteku.com/?feature=tiktok&url=https://tiktok.com/video/123
+        const shareableUrl = `${window.location.origin}${window.location.pathname}?feature=${options.featureId}&mediaUrl=${encodeURIComponent(options.url)}`;
+
+        const title = options.title || document.title;
+        const text = options.text || `Lihat konten ini di All-in-One Downloader!`;
+        
+        // Sekarang kita gunakan URL baru yang sudah kita buat
+        return `<button class="share-button" data-url="${shareableUrl}" data-title="${title}" data-text="${text}"><i class="fas fa-share-alt"></i></button>`;
     }
+    return '';
+}
+    
+    function handleSharedUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const feature = params.get('feature');
+    const mediaUrl = params.get('mediaUrl');
+
+    if (feature && mediaUrl) {
+        console.log(`Mendeteksi link yang dibagikan: Fitur=${feature}, URL=${mediaUrl}`);
+        
+        // Ambil konfigurasi untuk fitur yang sesuai dari "peta" kita
+        const config = featureConfig[feature];
+
+        if (config) {
+            const pageElement = document.getElementById(config.pageId);
+            if (!pageElement) {
+                console.error(`Elemen halaman dengan ID '${config.pageId}' tidak ditemukan.`);
+                return;
+            }
+            
+            // Tampilkan halaman yang benar
+            showPage(pageElement);
+
+            // Isi otomatis input dan klik tombol fetch setelah halaman tampil
+            setTimeout(() => {
+                const urlInput = document.getElementById(config.inputId);
+                const fetchButton = document.getElementById(config.buttonId);
+
+                if (urlInput && fetchButton) {
+                    urlInput.value = mediaUrl;
+                    fetchButton.click();
+                } else {
+                    console.error(`Input atau Tombol tidak ditemukan di halaman '${config.pageId}'`);
+                }
+            }, 200); // Jeda sedikit lebih lama untuk memastikan semuanya siap
+        } else {
+            console.error(`Konfigurasi untuk fitur '${feature}' tidak ditemukan di featureConfig.`);
+        }
+    }
+}
     
     
     function showPage(pageToShow, callback = null) {
@@ -755,7 +865,7 @@ async function searchAdminContent() {
                            <p class="text-xs mb-2 truncate" title="${description}">${description}</p>
                         </div>
                         <div class="flex items-center space-x-2 mt-auto">
-                           ${createShareButtonHTML({ url: downloadUrl, title: description})}
+                           ${createShareButtonHTML({ featureId: 'pinterest-vintex', url: downloadUrl, title: description })}
                            <button data-url="${downloadUrl}" data-filename="${finalFilename}" class="add-to-queue-button"><i class="fas fa-plus"></i></button>
                            <button data-url="${downloadUrl}" data-filename="${finalFilename}" class="download-button-pin flex-1 text-center bg-red-600 text-white font-semibold py-1 px-2 rounded-lg text-sm"><i class="fas fa-download mr-1"></i>Download</button>
                         </div>
@@ -899,39 +1009,102 @@ async function fetchMultiModelChat() {
     }
 
     async function fetchTTS() {
-        displayLoading(ttsResultArea, fetchTtsButton, 'card');
-        try {
-            const text = validateInput(ttsTextInput);
-            const response = await fetch(`${API_BASE_URL}/tools/text-to-speech?text=${encodeURIComponent(text)}`);
-            const data = await response.json();
-            if (data.status !== true || !Array.isArray(data.result) || data.result.length === 0) throw new Error('Gagal mendapatkan data suara dari API.');
-            let resultHTML = data.result.map(voice => {
-                const voiceName = voice.voice_name;
-                let audioUrl = Object.values(voice).find(val => typeof val === 'string' && val.endsWith('.wav'));
-                if (voiceName && audioUrl) {
-                    const filename = `${voiceName.replace(/ /g, '_')}_TTS.wav`;
-                    return `<div class="bg-gradient-to-br p-3 flex items-center space-x-2">
-                                <div class="flex-1">
-                                    <p class="font-semibold mb-2">${voiceName}</p>
-                                    <audio controls class="w-full mb-3" src="${audioUrl}"></audio>
-                                    <div class="flex items-center space-x-2">
-                                        <button data-url="${audioUrl}" data-filename="${filename}" class="new-dl-button flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm"><i class="fas fa-download mr-2"></i>Download</button>
-                                        <button class="add-to-queue-button" data-url="${audioUrl}" data-filename="${filename}"><i class="fas fa-plus"></i></button>
-                                    </div>
-                                </div>
-                                ${createShareButtonHTML({ url: audioUrl, title: `Suara ${voiceName}`, text: `Dengarkan suara ini` })}
-                            </div>`;
-                }
-                return '';
-            }).join('');
-            ttsResultArea.innerHTML = `<div class="space-y-3">${resultHTML}</div>`;
-        } catch (error) {
-            displayError(ttsResultArea, error);
-        } finally {
-            fetchTtsButton.disabled = false;
-            fetchTtsButton.textContent = 'Ubah ke Suara';
+    displayLoading(ttsResultArea, fetchTtsButton, 'card');
+    try {
+        const text = validateInput(ttsTextInput);
+        const response = await fetch(`${API_BASE_URL}/tools/text-to-speech?text=${encodeURIComponent(text)}`);
+        const data = await response.json();
+        if (data.status !== true || !Array.isArray(data.result) || data.result.length === 0) {
+            throw new Error('Gagal mendapatkan data suara dari API.');
         }
+
+        // --- Perubahan dimulai di sini ---
+        let resultHTML = data.result.map(voice => {
+            const voiceName = voice.voice_name;
+            let audioUrl = Object.values(voice).find(val => typeof val === 'string' && val.endsWith('.wav'));
+            if (voiceName && audioUrl) {
+                const baseFilename = `${voiceName.replace(/ /g, '_')}_TTS`;
+                
+                return `<div class="bg-gradient-to-br p-3 flex items-center space-x-2">
+                            <div class="flex-1">
+                                <p class="font-semibold mb-2">${voiceName}</p>
+                                <audio controls class="w-full mb-3" src="${audioUrl}"></audio>
+                                <div class="grid grid-cols-2 gap-2">
+                                    
+                                    <button data-url="${audioUrl}" data-filename="${baseFilename}.wav" class="new-dl-button flex items-center justify-center text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm">
+                                        <i class="fas fa-music mr-2"></i>Audio
+                                    </button>
+                                    
+                                    <button data-url="${audioUrl}" data-filename="${baseFilename}_VN.ogg" class="vn-dl-button flex items-center justify-center text-center bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm">
+                                        <i class="fab fa-whatsapp mr-2"></i>VN
+                                    </button>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            return '';
+        }).join('');
+        // --- Akhir dari perubahan ---
+
+        ttsResultArea.innerHTML = `<div class="space-y-3">${resultHTML}</div>`;
+    } catch (error) {
+        displayError(ttsResultArea, error);
+    } finally {
+        fetchTtsButton.disabled = false;
+        fetchTtsButton.textContent = 'Ubah ke Suara';
     }
+}
+
+async function convertToVN(wavUrl, newFilename, buttonElement) {
+    const originalText = buttonElement.innerHTML;
+    buttonElement.disabled = true;
+    buttonElement.innerHTML = `<div class="animate-spin rounded-full h-4 w-4 border-b-2"></div><span class="ml-2">Proses...</span>`;
+    showToast("Memulai konversi ke VN, mohon tunggu...", "info");
+
+    try {
+        const { FFmpeg, FFmpegUtil } = window.FFmpeg;
+        const { fetchFile } = FFmpegUtil;
+        
+        const ffmpeg = new FFmpeg();
+        ffmpeg.on('log', ({ message }) => {
+            console.log(`[FFMPEG LOG]: ${message}`); // Log ini boleh ditinggal, berguna untuk melihat proses
+        });
+        await ffmpeg.load();
+
+        const proxiedWavUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(wavUrl)}`;
+        showToast("Mengunduh file via proxy...", "info");
+        const wavData = await fetchFile(proxiedWavUrl);
+        
+        await ffmpeg.writeFile('input.wav', wavData);
+
+        showToast("Mengonversi ke format VN...", "info");
+        await ffmpeg.exec(['-i', 'input.wav', '-c:a', 'libopus', 'output.ogg']);
+
+        const oggData = await ffmpeg.readFile('output.ogg');
+        
+        const blob = new Blob([oggData.buffer], { type: 'audio/ogg' });
+        const objectUrl = URL.createObjectURL(blob);
+
+        const tempLink = document.createElement('a');
+        tempLink.href = objectUrl;
+        tempLink.download = newFilename;
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(objectUrl);
+        
+        showToast("Konversi VN berhasil!", "success");
+        saveToHistory(newFilename, wavUrl, 'audio');
+
+    } catch (error) {
+        console.error("Kesalahan saat konversi VN:", error);
+        displayError(ttsResultArea, new Error("Gagal mengonversi audio ke format VN. Silakan coba lagi."));
+        showToast("Gagal mengonversi ke VN.", "error");
+    } finally {
+        buttonElement.disabled = false;
+        buttonElement.innerHTML = originalText;
+    }
+}
 
     async function fetchTikTokInfoV2() {
         displayLoading(tiktokV2ResultArea, fetchTiktokV2Button, 'card');
@@ -1011,7 +1184,7 @@ async function fetchMultiModelChat() {
                     <div class="flex items-center space-x-2 mt-auto">
                         <button class="add-to-queue-button" data-url="${item.direct}" data-filename="${filename}"><i class="fas fa-plus"></i></button>
                         <button data-url="${item.direct}" data-filename="${filename}" class="new-dl-button flex-1 text-center bg-red-600 text-white font-semibold py-1 px-2 rounded-lg text-sm"><i class="fas fa-download mr-1"></i>Download</button>
-                        ${createShareButtonHTML({ url: item.direct, title: 'Gambar dari Pinterest'})}
+                        ${createShareButtonHTML({ featureId: 'pinterest-v2', url: url, title: 'Gambar dari Pinterest'})}
                     </div>
                 </div>`;
             }).join('');
@@ -1650,6 +1823,12 @@ if (adminProcessBtn) {
     fetchAdminDownloadButton.click(); 
 }
 
+const vnBtn = target.closest('.vn-dl-button');
+        if (vnBtn) {
+            convertToVN(vnBtn.dataset.url, vnBtn.dataset.filename, vnBtn);
+            return; // Penting: Tambahkan 'return' agar kode di bawahnya tidak ikut dijalankan
+        }
+
         const dlBtn = target.closest('.new-dl-button, .dl-image-button, .download-button, .download-button-yt, .download-button-ig, .download-button-pin, .download-button-yt-v2');
         if (dlBtn) {
             forceDownload(dlBtn.dataset.url, dlBtn.dataset.filename, dlBtn);
@@ -1714,4 +1893,5 @@ setupInputPersistence(adminDownloadUrlInput, 'saved_admin_download_url');
     
     setTema(localStorage.getItem('theme') === 'dark');
     checkApiStatus();
+    handleSharedUrl();
 });
