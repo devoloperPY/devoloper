@@ -1014,41 +1014,47 @@ async function handleSharedUrl() {
     const mediaUrl = params.get('mediaUrl');
 
     if (feature && mediaUrl) {
-        // Alih-alih membuka halaman fitur, kita tampilkan halaman viewer
         const viewerPage = document.getElementById('viewer-page');
         const viewerContentArea = document.getElementById('viewer-content-area');
         const viewerTitle = document.getElementById('viewer-title');
+
+        if (!viewerPage) return;
 
         showPage(viewerPage);
         viewerTitle.textContent = 'Memuat Konten...';
         viewerContentArea.innerHTML = `<div class="flex justify-center items-center"><div class="animate-spin rounded-full h-10 w-10 border-b-2"></div></div>`;
 
         try {
-            let finalMedia; // Ini akan berisi objek { type, url, title, downloadUrl, filename }
+            let finalMedia;
 
-            // --- LOGIKA UNTUK MENGAMBIL DATA KONTEN ---
-            if (feature === 'pinterest-vintex' || feature === 'gimage' || feature === 'pinterest-v2') {
-                 // Untuk link gambar langsung, kita bisa langsung menampilkannya
-                 finalMedia = { type: 'image', url: mediaUrl, title: 'Gambar Dibagikan', downloadUrl: mediaUrl, filename: 'shared-image.jpg' };
+            // --- LOGIKA PEMANGGILAN API YANG SUDAH DIPERBAIKI ---
             
-            } else if (feature === 'tiktok-v2' || feature === 'tiktok-vintex') {
-                 const response = await fetch(`${API_BASE_URL}/download/tiktok?url=${encodeURIComponent(mediaUrl)}`);
-                 const data = await response.json();
-                 if (!data.status) throw new Error('API TikTok gagal merespons.');
-                 const videoData = data.result.data;
-                 finalMedia = { type: 'video', url: videoData.play, title: videoData.title || 'Video TikTok', downloadUrl: videoData.play, filename: 'tiktok-video.mp4' };
+            if (feature === 'tiktok-vintex') {
+                const response = await fetch(`https://api.ownblox.my.id/api/ttdl?url=${encodeURIComponent(mediaUrl)}`);
+                const data = await response.json();
+                if (!data.status || !data.result) throw new Error('API TikTok (Vintex) gagal.');
+                const videoData = data.result;
+                finalMedia = { type: 'video', url: videoData.video, title: videoData.title || 'Video TikTok', downloadUrl: videoData.video, filename: 'tiktok-vintex.mp4' };
             
-            } else if (feature === 'instagram-v2' || feature === 'instagram-vintex') {
+            } else if (feature === 'tiktok-v2') {
+                const response = await fetch(`${API_BASE_URL}/download/tiktok?url=${encodeURIComponent(mediaUrl)}`);
+                const data = await response.json();
+                if (!data.status || (data.result && data.result.code !== 0)) throw new Error(data.result.msg || 'API TikTok (V2) gagal.');
+                const videoData = data.result.data;
+                finalMedia = { type: 'video', url: videoData.play, title: videoData.title || 'Video TikTok', downloadUrl: videoData.play, filename: 'tiktok-v2.mp4' };
+            
+            } else if (feature.includes('instagram')) {
                 const response = await fetch(`${API_BASE_URL}/download/instagram?url=${encodeURIComponent(mediaUrl)}`);
                 const data = await response.json();
-                if (!data.status || !data.result.downloadUrls) throw new Error('API Instagram gagal merespons.');
-                const videoData = data.result.downloadUrls[0]; // Ambil media pertama dari carousel
-                finalMedia = { type: 'video', url: videoData, title: data.result.title || 'Postingan Instagram', downloadUrl: videoData, filename: 'instagram-media.mp4' };
-            }
-            // --- TUGAS ANDA: Tambahkan blok 'else if' untuk fitur lain (YouTube, dll.) di sini ---
-
-
-            if (!finalMedia) {
+                if (!data.status || !data.result.downloadUrls) throw new Error('API Instagram gagal.');
+                const firstMediaUrl = data.result.downloadUrls[0];
+                const isVideo = firstMediaUrl.includes('.mp4');
+                finalMedia = { type: isVideo ? 'video' : 'image', url: firstMediaUrl, title: data.result.title || 'Postingan Instagram', downloadUrl: firstMediaUrl, filename: 'instagram-media' + (isVideo ? '.mp4' : '.jpg') };
+            
+            } else if (feature.includes('pinterest') || feature === 'gimage') {
+                finalMedia = { type: 'image', url: mediaUrl, title: 'Gambar Dibagikan', downloadUrl: mediaUrl, filename: 'shared-image.jpg' };
+            
+            } else {
                 throw new Error(`Fitur '${feature}' tidak didukung untuk tampilan pratinjau.`);
             }
 
@@ -1058,7 +1064,7 @@ async function handleSharedUrl() {
             if (finalMedia.type === 'image') {
                 mediaHTML = `<img src="${finalMedia.url}" class="max-w-full max-h-full rounded-lg shadow-lg object-contain">`;
             } else if (finalMedia.type === 'video') {
-                mediaHTML = `<video src="${finalMedia.url}" controls class="max-w-full max-h-full rounded-lg shadow-lg"></video>`;
+                mediaHTML = `<video src="${finalMedia.url}" controls autoplay class="max-w-full max-h-full rounded-lg shadow-lg"></video>`;
             }
 
             viewerContentArea.innerHTML = `
@@ -1067,16 +1073,12 @@ async function handleSharedUrl() {
                     <button data-url="${finalMedia.downloadUrl}" data-filename="${finalMedia.filename}" class="new-dl-button bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
                         <i class="fas fa-download mr-2"></i>Download
                     </button>
-                </div>
-            `;
+                </div>`;
 
         } catch (error) {
             console.error("Gagal memuat konten untuk viewer:", error);
             viewerTitle.textContent = 'Gagal Memuat';
-            viewerContentArea.innerHTML = `<div class="error-box">
-                <p class="error-title">Gagal memuat konten</p>
-                <p class="error-message">${error.message}</p>
-            </div>`;
+            viewerContentArea.innerHTML = `<div class="error-box"><p class="error-title">Gagal memuat konten</p><p class="error-message">${error.message}</p></div>`;
         }
     }
 }
@@ -1492,27 +1494,47 @@ async function playFromSpotifySearch(link, title, button) {
     }
     
     async function fetchTikTokInfo() {
-        displayLoading(tiktokResultArea, fetchTiktokVideoButton, 'card');
-        try {
-            const videoUrl = validateInput(tiktokUrlInput, 'tiktok');
-            const apiUrl = `https://api.ownblox.my.id/api/ttdl?url=${encodeURIComponent(videoUrl)}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            if (data.status === true && data.result) {
-                const result = data.result;
-                const customNamePart = tiktokCustomFilenameInput.value.trim();
-                let finalBaseFilename = customNamePart ? `ByVintex - ${customNamePart}` : (result.title.replace(/[<>:"/\\|?*]/g, '_').substring(0, 50) || 'tiktok_video_download');
-                tiktokResultArea.innerHTML = `<div class="bg-gradient-to-br p-4"><p class="font-semibold mb-2 truncate" title="${result.title}">${result.title}</p><p class="text-sm mb-4">by: ${result.author}</p><video class="w-full rounded-lg mb-4" controls src="${result.video}"></video><div class="flex items-center space-x-2"><div class="flex space-x-2 flex-1"><button data-url="${result.video}" data-filename="${finalBaseFilename}.mp4" class="download-button flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"><i class="fas fa-video mr-2"></i>Video</button><button data-url="${result.audio}" data-filename="${finalBaseFilename}.mp3" class="download-button flex-1 text-center bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg"><i class="fas fa-music mr-2"></i>Audio</button></div><button class="add-to-queue-button" data-url="${result.video}" data-filename="${finalBaseFilename}.mp4"><i class="fas fa-plus"></i></button>${createShareButtonHTML({url: videoUrl, title: result.title})}</div></div>`;
-            } else {
-                throw new Error(data.message || 'Gagal mengambil data video.');
-            }
-        } catch (error) {
-            displayError(tiktokResultArea, error);
-        } finally {
-            fetchTiktokVideoButton.disabled = false;
-            fetchTiktokVideoButton.textContent = 'Download';
+    const tiktokUrlInput = document.getElementById('tiktok-url-input');
+    const tiktokResultArea = document.getElementById('tiktok-result-area');
+    const fetchTiktokVideoButton = document.getElementById('fetch-tiktok-video-button');
+    const tiktokCustomFilenameInput = document.getElementById('tiktok-custom-filename');
+
+    displayLoading(tiktokResultArea, fetchTiktokVideoButton, 'card');
+    try {
+        const videoUrl = validateInput(tiktokUrlInput, 'tiktok');
+        const apiUrl = `https://api.ownblox.my.id/api/ttdl?url=${encodeURIComponent(videoUrl)}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.status === true && data.result) {
+            const result = data.result;
+            const customNamePart = tiktokCustomFilenameInput.value.trim();
+            let finalBaseFilename = customNamePart ? `ByVintex - ${customNamePart}` : (result.title.replace(/[<>:"/\\|?*]/g, '_').substring(0, 50) || 'tiktok_video_download');
+            
+            tiktokResultArea.innerHTML = `
+                <div class="bg-gradient-to-br p-4">
+                    <p class="font-semibold mb-2 truncate" title="${result.title}">${result.title}</p>
+                    <p class="text-sm mb-4">by: ${result.author}</p>
+                    <video class="w-full rounded-lg mb-4" controls src="${result.video}"></video>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex space-x-2 flex-1">
+                            <button data-url="${result.video}" data-filename="${finalBaseFilename}.mp4" class="download-button flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"><i class="fas fa-video mr-2"></i>Video</button>
+                            <button data-url="${result.audio}" data-filename="${finalBaseFilename}.mp3" class="download-button flex-1 text-center bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg"><i class="fas fa-music mr-2"></i>Audio</button>
+                        </div>
+                        <button class="add-to-queue-button" data-url="${result.video}" data-filename="${finalBaseFilename}.mp4"><i class="fas fa-plus"></i></button>
+                        ${createShareButtonHTML({ featureId: 'tiktok-vintex', url: videoUrl, title: result.title })}
+                    </div>
+                </div>`;
+        } else {
+            throw new Error(data.message || 'Gagal mengambil data video.');
         }
+    } catch (error) {
+        displayError(document.getElementById('tiktok-result-area'), error);
+    } finally {
+        fetchTiktokVideoButton.disabled = false;
+        fetchTiktokVideoButton.textContent = 'Download';
     }
+}
 
     async function fetchYouTubeMedia(type, buttonElement) {
         displayLoading(youtubeResultArea, buttonElement, 'card');
