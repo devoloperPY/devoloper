@@ -1705,18 +1705,11 @@ setupInputPersistence(adminDownloadUrlInput, 'saved_admin_download_url');
         };
         closeModalButton.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        
-        // Logika baru: Langsung cek dan tampilkan modal tanpa jeda
-        const alreadyShown = localStorage.getItem('modalShown');
-        if (!alreadyShown) {
-            modalOverlay.classList.remove('hidden');
-            // Sedikit jeda agar transisi CSS berjalan mulus
-            setTimeout(() => {
-                modalOverlay.style.opacity = '1';
-                modalWidget.style.transform = 'scale(1)';
-            }, 50);
-            localStorage.setItem('modalShown', 'true');
-        }
+        modalOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            modalOverlay.style.opacity = '1';
+            modalWidget.style.transform = 'scale(1)';
+        }, 50);
     }
     
     setTema(localStorage.getItem('theme') === 'dark');
